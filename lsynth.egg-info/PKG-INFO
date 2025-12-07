@@ -1,9 +1,9 @@
 Metadata-Version: 2.1
 Name: lsynth
-Version: 0.1.1
+Version: 0.1.2
 Summary: Evaluation of how good a synthetic dataset is compared to the original with presuppossing structural constraints
 Home-page: https://github.com/zeroknowledgediscovery/lsynth
-Download-URL: https://github.com/zeroknowledgediscovery/lsynth/archive/0.1.1.tar.gz
+Download-URL: https://github.com/zeroknowledgediscovery/lsynth/archive/0.1.2.tar.gz
 Author: Ishanu Chattopadhyay
 Author-email: research@paraknowledge.ai
 License: LICENSE
@@ -53,7 +53,7 @@ Installation
 
 .. code-block:: bash
 
-    pip install upsilon-fidelity
+    pip install lsynth
 
 
 Quick Example
@@ -62,7 +62,7 @@ Quick Example
 .. code-block:: python
 
     import pandas as pd
-    from upsilon_fidelity import compute_upsilon
+    from lsynth import compute_upsilon
 
     df_real = pd.read_csv("gss_2018.csv").sample(200)
 

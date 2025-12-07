@@ -32,7 +32,7 @@ Installation
 
 .. code-block:: bash
 
-    pip install upsilon-fidelity
+    pip install lsynth
 
 
 Quick Example
@@ -41,7 +41,7 @@ Quick Example
 .. code-block:: python
 
     import pandas as pd
-    from upsilon_fidelity import compute_upsilon
+    from lsynth import compute_upsilon
 
     df_real = pd.read_csv("gss_2018.csv").sample(200)
 
