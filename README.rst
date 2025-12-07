@@ -88,17 +88,6 @@ Supported Generators
 - ``"CTGAN"``: uses SDV CTGAN synthesizer
 - Custom generators also supported
 
-Relationship to Theory
-----------------------
-
-This package implements practical instantiations of:
-
-- Eq. (2): MAP-alignment for a coordinate
-- Eq. (3): aggregate Upsilon
-- Algorithm 2: one-sided fidelity score
-- Section VI: uncertainty (Hoeffding bounds)
-
-All without assumptions about the synthetic generator internals.
 
 Citation
 --------

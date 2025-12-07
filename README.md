@@ -91,16 +91,12 @@ This method:
 
 ---
 
-## Relationship to Theory
+## ToDo
 
-This package implements practical instantiations of:
+Implement
 
-- Eq. (2): MAP-alignment for a coordinate  
-- Eq. (3): aggregate Υ  
-- Algorithm 2: one-sided fidelity score
-- Section VI: uncertainty (Hoeffding bounds)
+- uncertainty (Hoeffding bounds)
 
-All without assumptions about the synthetic generator internals.
 
 ---
 
