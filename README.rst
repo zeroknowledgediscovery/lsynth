@@ -8,6 +8,25 @@ introduced by Chattopadhyay *et al.* and described in the manuscript
 "How Good Is Your Synthetic Data?".
 
 
+The core idea
+-------------
+
+For a synthetic record to be realistic, each coordinate should agree
+with the conditional MAP prediction inferred from real data.
+
+Formally, for a data record ``x`` and coordinate ``i``::
+
+    υ(x, i) = φ_i(x_i | x_{-i}) / max_y φ_i(y | x_{-i})
+
+Averaged over samples and coordinates::
+
+    Υ(D) in [0,1]
+
+- High ``Υ``: synthetic preserves *real conditional structure*
+- Low ``Υ``: structural distortion (even if marginals / covariance match)
+
+
+
 Installation
 ------------
 

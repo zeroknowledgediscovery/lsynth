@@ -1,9 +1,9 @@
 Metadata-Version: 2.1
 Name: lsynth
-Version: 0.0.6
+Version: 0.1.1
 Summary: Evaluation of how good a synthetic dataset is compared to the original with presuppossing structural constraints
 Home-page: https://github.com/zeroknowledgediscovery/lsynth
-Download-URL: https://github.com/zeroknowledgediscovery/lsynth/archive/0.0.6.tar.gz
+Download-URL: https://github.com/zeroknowledgediscovery/lsynth/archive/0.1.1.tar.gz
 Author: Ishanu Chattopadhyay
 Author-email: research@paraknowledge.ai
 License: LICENSE
@@ -27,6 +27,25 @@ MAP-alignment fidelity and dataset distance for synthetic tabular data
 This package implements the one-sided MAP-alignment fidelity statistic
 introduced by Chattopadhyay *et al.* and described in the manuscript
 "How Good Is Your Synthetic Data?".
+
+
+The core idea
+-------------
+
+For a synthetic record to be realistic, each coordinate should agree
+with the conditional MAP prediction inferred from real data.
+
+Formally, for a data record ``x`` and coordinate ``i``::
+
+    υ(x, i) = φ_i(x_i | x_{-i}) / max_y φ_i(y | x_{-i})
+
+Averaged over samples and coordinates::
+
+    Υ(D) in [0,1]
+
+- High ``Υ``: synthetic preserves *real conditional structure*
+- Low ``Υ``: structural distortion (even if marginals / covariance match)
+
 
 
 Installation
