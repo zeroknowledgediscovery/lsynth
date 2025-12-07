@@ -1,13 +1,12 @@
 Metadata-Version: 2.1
 Name: lsynth
-Version: 0.1.0
-Summary: MAP-alignment fidelity for synthetic tabular data
+Version: 0.0.4
+Summary: Evaluation of how good a synthetic dataset is compared to the original with presuppossing structural constraints
 Home-page: https://github.com/zeroknowledgediscovery/lsynth
-Download-URL: https://github.com/zeroknowledgediscovery/lsynth/archive/0.0.3.tar.gz
-Author: I. Chattopadhyay
+Download-URL: https://github.com/zeroknowledgediscovery/lsynth/archive/0.0.4.tar.gz
+Author: Ishanu Chattopadhyay
 Author-email: research@paraknowledge.ai
-License: 
-        
+License: LICENSE
 Keywords: machine learning,statistics
 Classifier: Development Status :: 4 - Beta
 Classifier: Intended Audience :: Developers
@@ -17,123 +16,118 @@ Classifier: Topic :: Software Development :: Libraries
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3.7
 Requires-Python: >=3.7
-Description-Content-Type: text/markdown
-Provides-Extra: ctgan
+Description-Content-Type: text/x-rst
 License-File: LICENSE
 
-# UPSILON-FIDELITY
+UPSILON-FIDELITY
+=================
 
-**MAP-alignment fidelity and dataset distance for synthetic tabular data**
+MAP-alignment fidelity and dataset distance for synthetic tabular data
+---------------------------------------------------------------------
 
 This package implements the one-sided MAP-alignment fidelity statistic
-introduced by Chattopadhyay *et al.*
-and described in the manuscript “How Good Is Your Synthetic Data?”.
+introduced by Chattopadhyay *et al.* and described in the manuscript
+"How Good Is Your Synthetic Data?".
 
-The core idea:
+The core idea
+-------------
 
-> For a synthetic record to be realistic, each coordinate should agree
-> with the conditional MAP prediction inferred from real data.
+For a synthetic record to be realistic, each coordinate should agree
+with the conditional MAP prediction inferred from real data.
 
-Formally, for a data record x and coordinate i:
+Formally, for a data record ``x`` and coordinate ``i``::
 
-```
-υ(x, i) = φ_i(x_i | x_{-i}) / max_y φ_i(y | x_{-i})
-```
+    υ(x, i) = φ_i(x_i | x_{-i}) / max_y φ_i(y | x_{-i})
 
-Averaged over samples and coordinates:
+Averaged over samples and coordinates::
 
-```
-Υ(D) in [0,1]
-```
+    Υ(D) in [0,1]
 
-High Υ => synthetic preserves *real conditional structure*  
-Low Υ => structural distortion (even if marginals/covariance match)
+- High ``Υ``: synthetic preserves *real conditional structure*
+- Low ``Υ``: structural distortion (even if marginals / covariance match)
 
----
+Installation
+------------
 
-## Installation
+.. code-block:: bash
 
-```bash
-pip install upsilon-fidelity
-```
+    pip install upsilon-fidelity
 
 Optional CTGAN:
 
-```bash
-pip install upsilon-fidelity[ctgan]
-```
+.. code-block:: bash
 
----
+    pip install upsilon-fidelity[ctgan]
 
-## Quick Example
+Quick Example
+-------------
 
-```python
-import pandas as pd
-from upsilon_fidelity import compute_upsilon
+.. code-block:: python
 
-df_real = pd.read_csv("gss_2018.csv").sample(200)
+    import pandas as pd
+    from upsilon_fidelity import compute_upsilon
 
-ups_lsm, syn_lsm = compute_upsilon(
-    num=100,
-    model_path="gss_2018.joblib",
-    generate=True,
-    gen_algorithm="LSM",
-    orig_df=df_real,
-    n_workers=8,
-)
+    df_real = pd.read_csv("gss_2018.csv").sample(200)
 
-print("LSM mean Upsilon:", ups_lsm.mean())
-```
+    ups_lsm, syn_lsm = compute_upsilon(
+        num=100,
+        model_path="gss_2018.joblib",
+        generate=True,
+        gen_algorithm="LSM",
+        orig_df=df_real,
+        n_workers=8,
+    )
 
-Interpretation:
+    print("LSM mean Upsilon:", ups_lsm.mean())
+
+Interpretation
+--------------
 
 - ~1.0: synthetic matches conditional structure closely
 - ~0.7: Gaussian-like distortions
-- <<0.7: strong structural mismatch
+- << 0.7: strong structural mismatch
 
----
+Why MAP-alignment?
+------------------
 
-## Why MAP-alignment?
-
-Because **covariance matching is insufficient**.
+Because covariance matching is insufficient.
 
 Section VII of the manuscript gives explicit examples where:
+
 - Real and synthetic share identical means, variances, covariance matrices
-- Yet they differ *strongly* in conditional structure  
+- Yet they differ strongly in conditional structure
 - MAP-alignment catches the discrepancy immediately
 
 This method:
+
 - Detects nonlinear and higher-order structure
 - Avoids feature-embedding artifacts
 - Comes with finite-sample uncertainty control
 
----
+Supported Generators
+--------------------
 
-## Supported Generators
-
-- `"LSM"`: use QuasiNet as a generative model via qsample  
-- `"BASELINE"`: independent-column null model  
-- `"CTGAN"`: uses SDV CTGAN synthesizer  
+- ``"LSM"``: use QuasiNet as a generative model via ``qsample``
+- ``"BASELINE"``: independent-column null model
+- ``"CTGAN"``: uses SDV CTGAN synthesizer
 - Custom generators also supported
 
----
-
-## Relationship to Theory
+Relationship to Theory
+----------------------
 
 This package implements practical instantiations of:
 
-- Eq. (2): MAP-alignment for a coordinate  
-- Eq. (3): aggregate Υ  
+- Eq. (2): MAP-alignment for a coordinate
+- Eq. (3): aggregate Υ
 - Algorithm 2: one-sided fidelity score
 - Section VI: uncertainty (Hoeffding bounds)
 
 All without assumptions about the synthetic generator internals.
 
----
+Citation
+--------
 
-## Citation
+.. code-block:: text
 
-```
-Chattopadhyay I, et al.
-“How Good Is Your Synthetic Data?”
-```
+    Chattopadhyay I, et al.
+    "How Good Is Your Synthetic Data?"

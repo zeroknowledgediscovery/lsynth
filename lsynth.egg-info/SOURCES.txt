@@ -2,7 +2,6 @@ LICENSE
 MANIFEST.in
 README.md
 README.rst
-pyproject.toml
 setup.py
 lsynth/__init__.py
 lsynth/conditionals.py
