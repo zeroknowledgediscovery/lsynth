@@ -1,0 +1,20 @@
+[project]
+name = "lsynth"
+version = "0.1.0"
+description = "MAP-alignment fidelity for synthetic tabular data"
+authors = [
+  { name="I. Chattopadhyay" }
+]
+dependencies = [
+  "numpy",
+  "pandas",
+  "tqdm",
+  "quasinet",
+]
+readme = "README.md"
+license = { file="LICENSE" }
+
+[project.optional-dependencies]
+ctgan = [ "sdv>=1.8" ]
+
+

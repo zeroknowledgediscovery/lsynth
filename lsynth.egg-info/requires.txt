@@ -1,0 +1,7 @@
+numpy
+pandas
+tqdm
+quasinet
+
+[ctgan]
+sdv>=1.8

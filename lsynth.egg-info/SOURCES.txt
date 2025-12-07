@@ -1,0 +1,15 @@
+LICENSE
+MANIFEST.in
+README.md
+README.rst
+pyproject.toml
+setup.py
+lsynth/__init__.py
+lsynth/conditionals.py
+lsynth/core.py
+lsynth/metrics.py
+lsynth.egg-info/PKG-INFO
+lsynth.egg-info/SOURCES.txt
+lsynth.egg-info/dependency_links.txt
+lsynth.egg-info/requires.txt
+lsynth.egg-info/top_level.txt

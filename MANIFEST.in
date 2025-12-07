@@ -1,0 +1,5 @@
+include README.md
+include LICENSE
+
+recursive-include datasets examples *.ipynb *.py
+recursive-include docs *.md *.rst *.png *.pdf

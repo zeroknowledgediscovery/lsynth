@@ -1,0 +1,116 @@
+# UPSILON-FIDELITY
+
+**MAP-alignment fidelity and dataset distance for synthetic tabular data**
+
+This package implements the one-sided MAP-alignment fidelity statistic
+introduced by Chattopadhyay *et al.*
+and described in the manuscript “How Good Is Your Synthetic Data?”.
+
+The core idea:
+
+> For a synthetic record to be realistic, each coordinate should agree
+> with the conditional MAP prediction inferred from real data.
+
+Formally, for a data record x and coordinate i:
+
+```
+υ(x, i) = φ_i(x_i | x_{-i}) / max_y φ_i(y | x_{-i})
+```
+
+Averaged over samples and coordinates:
+
+```
+Υ(D) in [0,1]
+```
+
+High Υ => synthetic preserves *real conditional structure*  
+Low Υ => structural distortion (even if marginals/covariance match)
+
+---
+
+## Installation
+
+```bash
+pip install upsilon-fidelity
+```
+
+Optional CTGAN:
+
+```bash
+pip install upsilon-fidelity[ctgan]
+```
+
+---
+
+## Quick Example
+
+```python
+import pandas as pd
+from upsilon_fidelity import compute_upsilon
+
+df_real = pd.read_csv("gss_2018.csv").sample(200)
+
+ups_lsm, syn_lsm = compute_upsilon(
+    num=100,
+    model_path="gss_2018.joblib",
+    generate=True,
+    gen_algorithm="LSM",
+    orig_df=df_real,
+    n_workers=8,
+)
+
+print("LSM mean Upsilon:", ups_lsm.mean())
+```
+
+Interpretation:
+
+- ~1.0: synthetic matches conditional structure closely
+- ~0.7: Gaussian-like distortions
+- <<0.7: strong structural mismatch
+
+---
+
+## Why MAP-alignment?
+
+Because **covariance matching is insufficient**.
+
+Section VII of the manuscript gives explicit examples where:
+- Real and synthetic share identical means, variances, covariance matrices
+- Yet they differ *strongly* in conditional structure  
+- MAP-alignment catches the discrepancy immediately
+
+This method:
+- Detects nonlinear and higher-order structure
+- Avoids feature-embedding artifacts
+- Comes with finite-sample uncertainty control
+
+---
+
+## Supported Generators
+
+- `"LSM"`: use QuasiNet as a generative model via qsample  
+- `"BASELINE"`: independent-column null model  
+- `"CTGAN"`: uses SDV CTGAN synthesizer  
+- Custom generators also supported
+
+---
+
+## Relationship to Theory
+
+This package implements practical instantiations of:
+
+- Eq. (2): MAP-alignment for a coordinate  
+- Eq. (3): aggregate Υ  
+- Algorithm 2: one-sided fidelity score
+- Section VI: uncertainty (Hoeffding bounds)
+
+All without assumptions about the synthetic generator internals.
+
+---
+
+## Citation
+
+```
+Chattopadhyay I, et al.
+“How Good Is Your Synthetic Data?”
+```
