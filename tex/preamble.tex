@@ -1,0 +1,301 @@
+\usepackage{etex}
+\usepackage{amsfonts,amsmath,amsthm}
+\usepackage{graphicx}
+%\usepackage{booktabs}
+\usepackage[usenames,x11names, dvipsnames, svgnames]{xcolor}
+\usepackage{dsfont}
+\usepackage{mathrsfs}
+\usepackage{texshade}
+\usepackage{hyperref}
+\usepackage{pdfpages}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=blue,
+  filecolor=black,
+  urlcolor=DodgerBlue4,
+  breaklinks=false,
+  % linkbordercolor=red,% hyperlink borders will be red
+  % pdfborderstyle={/S/U/W 1}% border style will be underline of width 1pt
+}
+\usepackage{array}
+\usepackage{xr}
+\usepackage{verbatim}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{tikz-network}
+%\usepackage{times}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{shapes,calc,shadows,fadings,arrows,decorations.pathreplacing,automata,positioning}
+\usetikzlibrary{external}
+\usetikzlibrary{decorations.text}
+\usepgfplotslibrary{colorbrewer} 
+\usepgfplotslibrary{statistics}
+
+\tikzexternalize[prefix=./Figures/External/]% activate externalization!
+\tikzexternaldisable
+\usepackage{geometry}
+\geometry{letterpaper, left=.7in,right=.7in,top=.7in,bottom=.7in,marginparwidth=.55in, % Adjust the width of the marginpar
+  marginparsep=0.05cm % Adjust the separation between the margin paragraph and the text
+}
+\usepackage{rotating}
+\definecolor{nodecol}{RGB}{240,240,220}
+\definecolor{nodeedge}{RGB}{240,240,225}
+\definecolor{edgecol}{RGB}{130,130,130}
+\usetikzlibrary{pgfplots.dateplot}
+\usetikzlibrary{patterns}
+\usetikzlibrary{decorations.markings}
+\usepackage{fancyhdr}
+\renewcommand{\headrulewidth}{0pt}
+\usepackage{mathtools}
+\usepackage{datetime}
+\usepackage{comment}
+\usepgfplotslibrary{colormaps}
+\usepackage{lineno}
+\usepackage{tikz-network} 
+%\usepackage{listings}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+%\renewcommand{\baselinestretch}{.93}
+%\renewcommand{\captionN}[1]{\caption{\color{CadetBlue4!50!black} \sffamily \fontsize{9}{11}\selectfont #1  }}
+%% ## Equation Space Control---------------------------
+\def\EQSP{3pt}
+\newcommand{\mltlne}[2][\EQSP]{\begingroup\setlength\abovedisplayskip{#1}\setlength\belowdisplayskip{#1}\begin{equation}\begin{multlined} #2 \end{multlined}\end{equation}\endgroup\noindent}
+\newcommand{\cgather}[2][\EQSP]{\begingroup\setlength\abovedisplayskip{#1}\setlength\belowdisplayskip{#1}\begin{gather} #2 \end{gather}\endgroup\noindent}
+\newcommand{\cgathers}[2][\EQSP]{\begingroup\setlength\abovedisplayskip{#1}\setlength\belowdisplayskip{#1}\begin{gather*} #2 \end{gather*}\endgroup\noindent}
+\newcommand{\calign}[2][\EQSP]{\begingroup\setlength\abovedisplayskip{#1}\setlength\belowdisplayskip{#1}\begin{align} #2 \end{align}\endgroup\noindent}
+\newcommand{\caligns}[2][\EQSP]{\begingroup\setlength\abovedisplayskip{#1}\setlength\belowdisplayskip{#1}\begin{align*} #2 \end{align*}\endgroup\noindent}
+\newcommand{\mnp}[2]{\begin{minipage}{#1}#2\end{minipage}} 
+%% COLOR DEFS------------------------------------------
+\newtheorem{thm}{Theorem}
+\newtheorem{cor}{Corollary}
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{defn}{Definition}
+\newtheorem{exmpl}{Example}
+\newtheorem{rem}{Remark}
+\newtheorem{notn}{Notation}
+%% ------------PROOF INCLUSION -----------------
+\def\NOPROOF{Proof omitted.}
+\newif\ifproof
+\prooffalse % or \draftfalse
+\newcommand{\Proof}[1]{
+  \ifproof
+  \begin{IEEEproof}
+    #1\end{IEEEproof}
+  \else
+  \NOPROOF
+  \fi
+}
+%% ------------ -----------------
+\newcommand{\DETAILS}[1]{#1}
+%% ------------ -----------------
+% color commands------------------------
+\newcommand{\etal}{\textit{et} \mspace{3mu} \textit{al.}}
+% \renewcommand{\algorithmiccomment}[1]{$/** $ #1 $ **/$}
+\newcommand{\vect}[1]{\textbf{\textit{#1}}}
+\newcommand{\figfont}{\fontsize{8}{8}\selectfont\strut}
+\newcommand{\hlt}{ \bf \sffamily \itshape\color[rgb]{.1,.2,.45}}
+\newcommand{\pitilde}{\widetilde{\pi}}
+\newcommand{\Pitilde}{\widetilde{\Pi}}
+\newcommand{\bvec}{\vartheta}
+\newcommand{\algo}{\textrm{\bf\texttt{GenESeSS}}\xspace}
+\newcommand{\xalgo}{\textrm{\bf\texttt{xGenESeSS}}\xspace}
+\newcommand{\FNTST}{\bf }
+\newcommand{\FNTED}{\color{darkgray} \scriptsize $\phantom{.}$}
+\newcommand{\sync}{\otimes}
+\newcommand{\psync}{\hspace{3pt}\overrightarrow{\hspace{-3pt}\sync}}
+% \newcommand{\psync}{\raisebox{-4pt}{\begin{tikzpicture}\node[anchor=south] (A) {$\sync$};
+%   \draw [->,>=stealth] ([yshift=-2pt, xshift=2pt]A.north west) -- ([yshift=-2pt]A.north east); %\end{tikzpicture}}}
+\newcommand{\base}[1]{\llbracket #1 \rrbracket}
+\newcommand{\nst}{\textrm{\sffamily\textsc{Numstates}}}
+\newcommand{\HA}{\boldsymbol{\mathds{H}}}
+\newcommand{\eqp}{ \vartheta }
+\newcommand{\entropy}[1]{\boldsymbol{h}\left ( #1 \right )}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}%
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}%
+\newcommand{\absB}[1]{\big\lvert #1 \big\rvert}%
+% #############################################################
+% #############################################################
+% PREAMBLE ####################################################
+% #############################################################
+% #############################################################
+% \usepackage{pnastwoF}      
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\expect}{\mathbf{E}}
+\DeclareMathOperator*{\var}{\mathbf{Var}}
+
+\newcommand{\ND}{ \mathcal{N}  }
+\usepackage[linesnumbered,ruled,vlined,noend]{algorithm2e}
+\newcommand{\captionN}[1]{\caption{\color{gray} \sffamily \fontsize{9}{10}\selectfont #1  }}
+\newcommand{\btl}{\ \textbf{\small\sffamily bits/letter}}
+\usepackage{concmath}
+%\usepackage{kerkis}
+\usepackage{tgheros}
+%\usepackage{newtxtext}
+%\usepackage{pxfonts}
+%\usepackage{newtxmath}
+%\usepackage{times}
+% \usepackage{ccfonts}
+%save defaults 
+%\renewcommand{\rmdefault}{phv} % Arial
+%\renewcommand{\sfdefault}{phv} % Arial
+\edef\keptrmdefault{\rmdefault}
+\edef\keptsfdefault{\sfdefault}
+\edef\keptttdefault{\ttdefault}
+%
+\usepackage[OT1]{fontenc}
+%\usepackage{eulervm} 
+%\usepackage{ccfonts}
+%\usepackage{eulervm} 
+%\usepackage[OT1]{fontenc}
+%restore defaults
+\edef\rmdefault{\keptrmdefault}
+\edef\sfdefault{\keptsfdefault}
+\edef\ttdefault{\keptttdefault}
+%\usepackage{tgheros} 
+%\usepackage{beton} 
+
+
+\tikzexternalenable 
+% ###################################
+\newcolumntype{L}[1]{>{\rule{0pt}{2ex}\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\rule{0pt}{2ex}\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\rule{0pt}{2ex}\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+% ################################################
+% ################################################
+% ################################################
+% ################################################
+\def\DISCLOSURE#1{\def\disclosure{#1}}
+\DISCLOSURE{\raisebox{15pt}{$\phantom{XxxX}$This sheet contains proprietary information 
+    not to be released to third parties except for the explicit purpose of evaluation.}
+}
+% ####################################
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+\newcommand{\paren}[1]{\left( #1 \right)}
+\newcommand{\bracket}[1]{\left[ #1 \right]}
+% \newcommand{\norm}[1]{\left\Vert #1 \right\Vert}
+\newcommand{\nrm}[1]{\left\llbracket{#1}\right\rrbracket}
+\newcommand{\parenBar}[2]{\paren{#1\,{\left\Vert\,#2\right.}}}
+\newcommand{\parenBarl}[2]{\paren{\left.#1\,\right\Vert\,#2}}
+\newcommand{\ie}{$i.e.$\xspace}
+\newcommand{\addcitation}{\textcolor{black!50!red}{\textbf{ADD CITATION}}}
+\newcommand{\subtochange}[1]{{\color{black!50!green}{#1}}}
+\newcommand{\tobecompleted}{{\color{black!50!red}TO BE COMPLETED.}}
+
+
+\newcommand{\pIn}{\mathscr{P}_{\textrm{in}}}
+\newcommand{\pOut}{\mathscr{P}_{\textrm{out}}}
+\newcommand{\aIn}[1][\Sigma]{#1_{\textrm{in}}}
+\newcommand{\aOut}[1][\Sigma]{#1_{\textrm{out}}}
+\newcommand{\xin}[1]{#1_{\textrm{in}}}
+\newcommand{\xout}[1]{#1_{\textrm{out}}}
+
+\newcommand{\R}{\mathbb{R}} % Set of real numbers
+\newcommand{\F}[1][]{\mathcal{F}_{#1}}
+\newcommand{\SR}{\mathcal{S}} % Semiring of sets
+\newcommand{\RR}{\mathcal{R}} % Ring of sets
+\newcommand{\N}{\mathbb{N}} % Set of natural numbers (0 included)
+
+
+\newcommand{\Pp}[1][n]{\mathscr{P}^+_{#1}}
+\renewcommand{\entropy}[1]{\boldsymbol{h}\left ( #1 \right )}
+
+
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{decorations.pathreplacing,shapes.misc}
+\usepgfplotslibrary{fillbetween}
+%usepackage{tikz-network}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{math}
+\usepgfplotslibrary{colorbrewer} 
+
+\usepackage{textcomp}
+\usepackage{colortbl}
+\usepackage{array}
+\usepackage{courier} 
+\usepackage{wrapfig}
+\usepackage{pifont}
+\usetikzlibrary{chains,backgrounds}
+\usetikzlibrary{intersections}
+\usetikzlibrary{pgfplots.groupplots}
+\usepgfplotslibrary{fillbetween} 
+\usetikzlibrary{arrows.meta}
+\usepackage{pgfplotstable}
+\usepackage[super,compress,sort,comma]{natbib}
+%\usepackage{natbib}
+\usepackage{setspace}
+\usetikzlibrary{math}
+\usetikzlibrary{matrix}
+\usepackage{xstring}
+\usepackage{xspace}
+\usepackage{flushend}
+
+\newcounter{Dcounter}
+\setcounter{Dcounter}{1}
+\newcommand{\DQS}[1]{\marginpar{\tikzexternaldisable \tikz{\node[rounded corners=5pt,draw=none,thick,fill=black!10,font=\sffamily\fontsize{7}{8}\selectfont] {\mnp{.45in} {\color{Red3}\raggedright  \#\theDcounter.~#1}}; }}\stepcounter{Dcounter}\xspace}
+
+
+\newcounter{Ecounter}
+\setcounter{Ecounter}{1}
+\newcommand{\xhd}[2][.99]{\tikzexternaldisable \tikz[baseline=-0.5ex]{\node[inner sep=2pt,text=black!80,rounded corners=0pt,draw=none,fill=black!10,font=\bf] {  \mnp{#1\textwidth}{\Roman{Ecounter}.~#2}}; }\stepcounter{Ecounter}\xspace}
+
+\newcounter{EEcounter}
+\setcounter{EEcounter}{1}
+\newcommand{\xhdx}[2][.99]{\tikzexternaldisable \tikz[baseline=-0.5ex]{\node[inner sep=2pt,text=black!80,rounded corners=0pt,draw=none,fill=Red1!15,font=\bf] {  \mnp{#1\textwidth}{\alph{EEcounter}.~#2}}; }\stepcounter{EEcounter}\xspace}
+
+
+\newcommand{\qn}[1][i]{\Phi_{#1}}
+\newcommand{\D}[1][i]{\mathscr{D}\left ( {\Sigma_#1} \right ) }
+\newcommand{\Dx}{\mathscr{D}}
+\def\J{\mathds{J}}
+\def\M{\omega}
+\def\N{\mathds{N}}
+\newcommand{\cp}[1][P]{\langle #1 \rangle}
+\newcommand{\mem}[1]{\M_{#1}}
+
+\parskip=6pt
+\parindent=0pt
+
+
+
+\makeatletter
+\newcommand{\limitpages}[1]{
+  \gdef\maxpages{#1}%
+  \ifx\latex@outputpage\@undefined\relax%
+  \global\let\latex@outputpage\@outputpage%
+  \fi%
+  \gdef\@outputpage{%
+    \ifnum\value{page}>\maxpages\relax%
+    % Do not output the page
+    \else%
+    \latex@outputpage%
+    \fi%
+  }%
+}
+\makeatother
+\newcommand{\note}[1]{{ \itshape \footnotesize \color{Red1}$\medbullet$~ #1}}
+\renewcommand{\thesubsectiondis}{\Alph{subsection}.}
+
+\newcommand{\VSP}{\vspace{-2pt}}
+
+
+
+
+\newcommand*{\doi}[1]{\href{http://dx.doi.org/#1}{doi: #1}}
+\renewcommand{\IEEEbibitemsep}{20pt plus 2pt}
+\makeatletter
+\IEEEtriggercmd{\reset@font\normalfont\fontsize{11}{14}\selectfont}
+\makeatother
+\IEEEtriggeratref{1}
+\newlength{\bibitemsep}\setlength{\bibitemsep}{.2\baselineskip plus .05\baselineskip minus .05\baselineskip}
+\newlength{\bibparskip}\setlength{\bibparskip}{0pt}
+\let\oldthebibliography\thebibliography
+\renewcommand\thebibliography[1]{%
+  \oldthebibliography{#1}%
+  \setlength{\parskip}{\bibitemsep}%
+  \setlength{\itemsep}{\bibparskip}%
+}
+\setlength{\bibitemsep}{.3\baselineskip plus .05\baselineskip minus .05\baselineskip}

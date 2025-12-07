@@ -1,0 +1,970 @@
+\documentclass[10pt,journal,twocolumn]{IEEEtran}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{hyperref}
+% Theorem environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{flushend}
+
+\title{How Good Is Your Synthetic Data?}
+
+\author{Chattopadhyay $et. al$}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We propose a principled, model-agnostic method for
+evaluating the fidelity of synthetic tabular data based on whether 
+conditional relationships among variables in the real date are preserved.
+In particular, we ask: Given a  synthetic sample,  if we resample a 
+coordinate from the real data’s conditional while holding the
+rest of the synthetic record fixed, does the realized value occur with high
+probability? This leads to a bounded, interpretable MAP-alignment
+statistic that directly measures how well a dataset reproduces its
+own learned conditional structure. Our approach induces a true metric on the space of underlying generative processes,
+with explicit finite-sample uncertainty bounds, and a one-sided fidelity score for assessing synthetic data against
+a trusted real dataset, based purely on samples, without invoking prior assumptions. Unlike
+moment-matching diagnostics such as covariance matrices, our
+approach evaluates the full conditional structure of the data,
+capturing nonlinear and higher-order dependencies, allowing us to precisely quantify with confidence: ``how good is your synthetic data?''
+\end{abstract}
+
+
+\section{Introduction and Motivation}
+Synthetic tabular data are increasingly used for benchmarking,
+method development, privacy-preserving analysis, and regulatory
+reporting. Yet there remains no unified, principled answer to the basic
+question: \emph{How similar is a synthetic dataset to the real one?}
+Current practices fall broadly into:
+\begin{itemize}
+\item \textbf{Likelihood-based metrics} ($e.g.$ ELBO~\cite{kingma2014autoencoding}, perplexity~\cite{jelinek1977perplexity}), requiring  the generator to have  a tractable joint density;
+\item \textbf{Task-based metrics~\cite{esteban2017realvalued}}, such as training a classifier on
+      synthetic data and testing on real data, which depend on subjective
+      downstream tasks and can obscure structural mismatches;
+\item \textbf{Embedding-based metrics} such as FID~\cite{heusel2017gans} or classifier-based
+      two-sample tests~\cite{lopezpaz2017revisiting}, which rely on feature extractors unrelated to
+      the data domain and  limit interpretability.
+\end{itemize}
+%% These approaches are not model-agnostic, often depend on architecture
+%% choices, and typically do not reveal how the synthetic data preserve
+%% (or distort) structural relationships among variables.
+Another common but fragile practice is to compare covariance matrices of the
+real and synthetic datasets, along with component-wise means~\cite{snoke2018general,nowok2016synthpop}. This only captures pairwise linear
+relationships and can easily be matched by synthetic data that
+nevertheless distorts nonlinear, conditional, or higher-order structure.
+Later in the paper (Section~\ref{sec:examples}), we explore  two concrete examples in
+$\mathbb{R}^3$.  In both cases, the ``real'' and ``synthetic'' datasets
+match \emph{exactly} in all first- and second-order moments---including
+nontrivial covariance, but have very different higher order dependencies.  
+The examples serve as tangible
+evidence for the necessity of evaluating synthetic data by its
+conditional structure rather than by low-order statistics.
+
+
+
+In this paper we  develop a complementary approach based on \emph{conditional
+structure inferred directly from data}. Given samples (real or
+synthetic) we estimate each coordinate's conditional distribution
+$\phi^i(\cdot\mid x^{-i})$, $e.g.$ using reported  conditional
+learners such as  conditional inference trees. Then, for any sample
+$x$ and coordinate $i$, we define a \emph{MAP-alignment score} (notation:  denotes $x^i$ denotes the $i^{th}$ variable, and $x^{-i}$ denotes $\{x^j\}, j \neq i$):
+\[
+\upsilon(x,i)
+=
+\frac{\phi^i(x^i \mid x^{-i})}{\max_{y} \phi^i(y\mid x^{-i})}, 
+\]
+%
+which has a direct generative interpretation:
+
+\textit{Fix a synthetic record and consider one coordinate at a time. Hold all other coordinates fixed to their values in the synthetic
+sample, and imagine drawing the remaining coordinate from the
+\emph{real} data’s conditional distribution. It then follows that $\upsilon(x,i)$
+measures the odds of this sampling experiment  to
+produce the observed value \(x_i\).}
+ %
+
+Averaging $\upsilon(x,i)$ over coordinates and samples in a given dataset $D$,  yields a bounded,
+interpretable statistic $\Upsilon(D)$.
+
+Thus,  our statistic
+measures how often, and by how much, the observed data agree with 
+conditional maximum-a-posteriori (MAP)~\cite{bishop2006pattern} predictions. This approach is entirely \emph{post hoc} and
+\emph{model-agnostic}, and does not require  access to the synthetic
+generator's internals. %% We need to infer (or assume we have access to) possibly noisy estimates of the conditional distributions of the real dataset.
+Under classical Brook-Dobrushin positivity conditions the full conditional system uniquely determines the joint
+distribution; connecting  MAP-alignment  to sharp identifiability results~\cite{brook1964,dobrushin1968,hammersley1971,besag1974} in the limit.
+We also  show that our MAP-alignment profiles
+induce a  distance  between datasets that converges to  a true metric on the
+space of underlying generative processes, with explicit finite-sample
+confidence bounds.
+
+
+Compared to related work on synthetic data utility spaning global and task-based measures~\cite{woo2009global,snoke2018general,nowok2016synthpop,elemam2020seven,elemam2022utility,dankar2022multidimensional,kaabachi2025scoping}, 
+which typically evaluate aggregate traits or downstream performance rather than the \emph{record-level conditional structure}, our goal here is to quantify with confidence how similar is your synthetic data without invoking  unvetted prior assumptions.
+
+\section{Formal Setup for Conditional Analysis}
+In our analysis we assume access to a procedure capable of estimating
+full conditional distributions from data, without committing to any
+specific method. In the applications (Section~\ref{sec:applications}) we
+instantiate this using a particular conditional learner, but the
+development that follows requires only that such (possibly noisy)
+conditional estimates can be obtained.
+
+Asssume we hve a set of observable variables:
+\[
+    X = (X^1,\dots,X^N)
+\]
+which take values in a finite product space
+\[
+    \mathcal{X} =
+    \mathcal{X}^1 \times \cdots \times \mathcal{X}^N.
+\]
+Let $P$ be the true data-generating distribution.
+For each coordinate $i$, define the full conditional
+\[
+    P_i(x^i \mid x^{-i})
+    :=
+    P(X^i = x^i \mid X^{-i} = x^{-i}).
+\]
+
+We represent model conditional kernels as
+$\phi^i(\cdot\mid x^{-i})$.
+We assume strict positivity in the sense that, on the effective support
+of interest,
+\[
+    \phi^i(x^i\mid x^{-i}) > 0
+    \quad\text{for all } x,
+\]
+and in practice enforce this by adding a small $\varepsilon$-floor to
+each conditional and renormalizing. This is the standard positivity
+assumption underlying Brook--Dobrushin factorization.
+
+\section{MAP-Alignment Functional}
+For any model $\{\phi^i\}$ and sample $x\in\mathcal{X}$, define
+\[
+    \upsilon(x,i)
+    :=
+    \frac{\phi^i(x^i\mid x^{-i})}
+         {\max_{y\in \mathcal{X}^i}
+          \phi^i(y\mid x^{-i})},
+\]
+which equals $1$ exactly when $x_i$ is a maximizer of the model conditional.
+
+Given a dataset $D=\{x_{k}\}_{k=1}^M$, define
+\[
+    \Upsilon(D)
+    :=
+    \frac{1}{MN}
+    \sum_{k=1}^M\sum_{i=1}^N
+    \upsilon(x_{k},i),
+\]
+an empirical estimate of
+\[
+    \Upsilon_\phi(P)
+    =
+    \mathbb{E}_{X\sim P}
+    \left[
+        \frac{1}{N}\sum_{i=1}^N \upsilon(X,i)
+    \right].
+\]
+
+\subsection{Behavior Under Exact Conditionals}
+
+\begin{lemma}[MAP-Alignment Under Exact Conditionals]
+\label{lem:map}
+Assume $\phi^i = P_i$ for all $i$.
+Fix $i$ and $x^{-i}$, and let $p_j := P_i(j\mid x^{-i})$,
+$p_{\max} := \max_j p_j$.
+If $X^i \sim P_i(\cdot\mid x^{-i})$, then
+\[
+    \upsilon(X,i) = \frac{P_i(X^i\mid x^{-i})}{p_{\max}},
+\qquad
+    \mathbb{E}[\upsilon(X,i)\mid x^{-i}]
+    =
+    \frac{1}{p_{\max}}\sum_j p_j^2.
+\]
+Moreover:
+\begin{itemize}
+\item $\upsilon(X,i)=1$ iff $X_i\in\arg\max_j p_j$.
+\item If $P_i(\cdot\mid x^{-i})$ is uniform on its support,
+      then $\mathbb{E}[\upsilon(X,i)\mid x^{-i}] = 1$.
+\item If some $p_j < p_{\max}$, then
+      $\mathbb{E}[\upsilon(X,i)\mid x^{-i}] < 1$.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}
+Immediate from the definition and the fact that
+$\sum_j p_j^2 \le p_{\max}\sum_j p_j = p_{\max}$.
+\end{proof}
+
+Thus, under exact conditionals,
+$\upsilon(X,i)$ detects whether coordinate $i$ is conditionally maximal.
+Define the oracle MAP-alignment:
+\[
+    \Upsilon_{\mathrm{oracle}}(P)
+    :=
+    \mathbb{E}_{X\sim P}
+    \left[
+        \frac{1}{N}\sum_{i=1}^N
+        \mathbf{1}\{X_i \in \arg\max_y P_i(y\mid X^{-i})\}
+    \right].
+\]
+
+\section{Brook--Dobrushin Factorization and Identifiability}
+Brook's lemma~\cite{brook1964} and Dobrushin's consistency theorem~\cite{dobrushin1968} provide a complete characterization of joint distributions in terms of their full conditionals when strict positivity holds.
+
+Assume
+\[
+    \phi^i(x^i\mid x^{-i}) = P_i(x^i\mid x^{-i})
+    \quad \text{whenever } P(x)>0.
+\]
+
+Choose a reference configuration $x^\circ$ with $P(x^\circ)>0$.
+Define the interpolating sequence
+\[
+    x^{(0)} = x^\circ, \qquad
+    x^{(i)} =
+    (x^1,\dots,x^i, x^{i+1,\circ},\dots,x^{N,\circ}),
+\]
+so $x^{(N)} = x$.
+By repeated conditioning,
+\[
+    \frac{P(x^{(i)})}{P(x^{(i-1)})}
+    =
+    \frac{P_i(x^i\mid x^{<i}, x^{>i,\circ})}
+         {P_i(x^{i,\circ}\mid x^{<i}, x^{>i,\circ})}.
+\]
+Multiplying yields the Brook factorization~\cite{brook1964}:
+\[
+    \frac{P(x)}{P(x^\circ)}
+    =
+    \prod_{i=1}^N
+    \frac{P_i(x^i\mid x^{<i}, x^{>i,\circ})}
+         {P_i(x^{i,\circ}\mid x^{<i}, x^{>i,\circ})}.
+\]
+
+Replacing $P_i$ by $\phi^i$ on the support gives an explicit
+reconstruction of $P$ from the conditionals.
+
+\begin{theorem}[Nonparametric Brook--Dobrushin Identifiability]
+\label{thm:brook}
+Assume:
+\begin{itemize}
+\item Strict positivity:
+      $\phi^i(x^i\mid x^{-i})>0$ for all $i$ and all $x$ with $P(x)>0$.
+\item Conditional accuracy:
+      $\phi^i(x^i\mid x^{-i}) = P_i(x^i\mid x^{-i})$ whenever $P(x)>0$.
+\end{itemize}
+Then:
+\begin{itemize}
+\item There exists a unique joint distribution
+      $\widetilde P$ whose full conditionals are $\{\phi^i\}$.
+\item $\widetilde P = P$ on $\mathrm{supp}(P)$.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+Strict positivity implies uniqueness of a joint distribution compatible
+with the full conditionals~\cite{brook1964,dobrushin1968}.
+Since $\phi^i = P_i$ on the support, the reconstructed joint equals $P$
+there, and uniqueness forces equality.
+\end{proof}
+
+\section{Evaluating Generators via \texorpdfstring{$\Upsilon$}{Upsilon}}
+For any model $\{\phi^i\}$,
+\[
+    \Upsilon_\phi(P)
+    =
+    \mathbb{E}_{X\sim P}
+    \left[
+        \frac{1}{N}\sum_{i=1}^N
+        \frac{\phi^i(X_i\mid X^{-i})}
+             {\max_y \phi^i(y\mid X^{-i})}
+    \right].
+\]
+
+Let $D_{\mathrm{test}}$ be i.i.d.\ data from $P$. If $\phi^i_n\to P_i$
+pointwise on the support and satisfy strict positivity, then dominated
+convergence yields
+\[
+    \Upsilon_{\phi_n}(P)
+    \to
+    \Upsilon_{\mathrm{oracle}}(P).
+\]
+
+\begin{corollary}[Generator Convergence via MAP-Alignment]
+Let $\phi^i_n$ be strictly positive kernels converging to $P_i$ on
+$\mathrm{supp}(P)$. Let $\widetilde P_n$ denote the joint compatible
+with $\{\phi^i_n\}$. Then:
+\begin{itemize}
+\item $\widetilde P_n \to P$ on $\mathrm{supp}(P)$.
+\item For any sequence of test sets $D_{\mathrm{test}}$ with
+      $|D_{\mathrm{test}}|\to\infty$, the empirical scores
+      $\Upsilon(D_{\mathrm{test}};\phi_n)$ converge in probability to
+      $\Upsilon_{\mathrm{oracle}}(P)$.
+\end{itemize}
+In particular, in regimes where the learned conditionals are known to
+converge to the truth, observing $\Upsilon(D_{\mathrm{test}};\phi_n)$
+close to $\Upsilon_{\mathrm{oracle}}(P)$ on sufficiently rich test data
+is strong evidence of accurate conditionals and, by
+Theorem~\ref{thm:brook}, recovery of the joint law on the support.
+Conversely, systematically low MAP-alignment indicates mis-specified
+conditionals even when marginal summaries look satisfactory.
+\end{corollary}
+
+\section{Conditional Inference, MAP-Alignment Uncertainty, and a Metric on Underlying Processes}
+
+\subsection{Inference of Conditionals Using Conditional Inference Trees}
+
+Let 
+$D = \{x^{k}\}_{k=1}^n \subset \mathcal{X}^1 \times \cdots \times \mathcal{X}^N$ 
+be a dataset in a finite product space. We construct a family of full conditional models 
+$\Phi^{(n)} = \{\varphi^{i,n}(\cdot \mid x^{-i})\}_{i=1}^N$
+by solving $N$ supervised problems, one for each coordinate. For each $i$, a conditional inference tree is trained to predict $X_i$ from $X_{-i}$, using an unbiased, permutation-based split selection and honest recursive partitioning as in \cite{hothorn2006,hothorn2006party,strobl2007}. Under standard regularity conditions (minimum node size $m_n\to\infty$, bounded depth growth, and intrinsic predictor dimension $d_i$), the conditional estimators satisfy the nonparametric uniform rate
+\begin{equation}
+\sup_{x_{-i}}
+\big|
+\varphi^{i,n}(x^i \mid x^{-i})
+-
+P_i(x^i\mid x^{-i})
+\big|
+=
+O_p\left(n^{-1/(d_i+2)}\right),
+\label{eq:conditional_tree_rate}
+\end{equation}
+where $P_i$ denotes the true full conditional of the underlying generative process.
+
+Strict positivity is imposed on the learned conditionals either intrinsically or via a small $\varepsilon$-floor. Under these assumptions, the Brook factorization and Dobrushin’s uniqueness criterion \cite{brook1964,dobrushin1968} guarantee that the full conditional family uniquely determines the compatible joint distribution, in the spirit of Hammersley--Clifford and Besag’s analysis of Gibbs fields \cite{hammersley1971,besag1974}. Samples can then be generated by iteratively resampling missing coordinates from $\varphi^{(n)}_i(\cdot \mid x_{-i})$, while clamping observed coordinates when performing conditional inference.
+
+\subsection{MAP-Alignment and its Finite-Sample Uncertainty}
+
+Given a trained conditional family $\Phi^{(n)}$, define the MAP-alignment score of a datapoint $x$ at coordinate $i$ as
+\begin{equation}
+\upsilon_{\Phi^{(n)}}(x,i)
+=
+\frac{
+\varphi^{i,n}(x^i \mid x^{-i})
+}{
+\max_{y\in\mathcal{X}^i} \varphi^{i,n}(y\mid x_{-i})
+},
+\label{eq:upsilon_definition}
+\end{equation}
+which lies in $[0,1]$.  
+For a test dataset 
+$D_{\mathrm{test}} = \{x_k\}_{k=1}^M$, define the empirical MAP-alignment functional
+\begin{equation}
+\hat{\Upsilon}_{\Phi^{(n)}}(D_{\mathrm{test}})
+=
+\frac{1}{MN}
+\sum_{k=1}^M
+\sum_{i=1}^N
+\upsilon_{\Phi^{(n)}}(x_k, i).
+\label{eq:upsilon_empirical}
+\end{equation}
+Let $Z = \upsilon_{\Phi^{(n)}}(X,i)$ where $(X,i)$ is drawn uniformly from the test set and the index set. Since $Z$ is bounded in $[0,1]$, Hoeffding’s inequality \cite{hoeffding1963} gives, for any $\varepsilon > 0$,
+\begin{equation}
+\Pr\Big(
+\big|
+\hat{\Upsilon}_{\Phi^{(n)}}(D_{\mathrm{test}})
+-
+\mathbb{E}[Z]
+\big|
+>
+\varepsilon
+\Big)
+\le
+2\exp(-2MN\varepsilon^2).
+\label{eq:upsilon_hoeffding}
+\end{equation}
+Thus
+\begin{equation}
+\hat{\Upsilon}_{\Phi^{(n)}}(D_{\mathrm{test}})
+=
+\mathbb{E}[Z] 
++ 
+O_p\!\left((MN)^{-1/2}\right).
+\end{equation}
+
+Combining this with the conditional estimation error in 
+\eqref{eq:conditional_tree_rate} yields
+\begin{equation}
+\hat{\Upsilon}_{\Phi^{(n)}}(D_{\mathrm{test}})
+=
+\Upsilon_{P}(D_{\mathrm{test}})
++
+O_p\!\left((MN)^{-1/2}
++
+n^{-1/(d_i+2)}
+\right),
+\label{eq:upsilon_full_uncertainty}
+\end{equation}
+providing full control of uncertainty from both the test sample and imperfect conditional learning.
+
+\subsection{A Metric on Underlying Generative Processes}
+
+For a strictly positive process $P$ with full conditionals $P_i$, define its population $\upsilon$-profile:
+\begin{equation}
+u_P(x,i)
+=
+\frac{
+P_i(x^i\mid x^{-i})
+}{
+\max_{y\in\mathcal{X}^i} P_i(y\mid x^{-i})
+}.
+\end{equation}
+Fix a reference probability measure $\mu$ on 
+$\mathcal{X}\times\{1,\dots,N\}$
+whose support dominates all processes considered. Define the distance
+\begin{equation}
+d(P_1,P_2)
+=
+\mathbb{E}_{(x,i)\sim\mu}
+\big[
+\lvert u_{P_1}(x,i) - u_{P_2}(x,i)\rvert
+\big].
+\label{eq:true_metric}
+\end{equation}
+
+\begin{theorem}
+Assume strict positivity and the Brook--Dobrushin uniqueness conditions \cite{brook1964,dobrushin1968}. Then $d$ is a metric on the space of generative processes compatible with these assumptions.
+\end{theorem}
+
+\begin{IEEEproof}
+Nonnegativity and symmetry are immediate. The triangle inequality follows from the scalar inequality 
+$\lvert a-c\rvert \le \lvert a-b\rvert + \lvert b-c\rvert$ applied pointwise and integrated with respect to $\mu$.  
+For identity of indiscernibles, if $d(P_1,P_2)=0$, then 
+$u_{P_1}(x,i)=u_{P_2}(x,i)$ almost everywhere, implying equality of 
+$P_{1,i}(\cdot\mid x_{-i})$ and $P_{2,i}(\cdot\mid x_{-i})$. Under strict positivity, the full conditionals uniquely determine the joint distribution by Brook–Dobrushin and Hammersley–Clifford \cite{hammersley1971}, and therefore $P_1=P_2$.
+\end{IEEEproof}
+
+Given empirical datasets $D_1, D_2$, train conditional generator families  $G_1, G_2$ yielding conditional families 
+$\Phi^{(1)}$ and $\Phi^{(2)}$. Let $\hat{\mu}$ be the empirical distribution over 
+$S = D_1 \cup D_2$. Define the empirical distance
+\begin{equation}
+\hat d(D_1,D_2)
+=
+\frac{1}{|S|N}
+\sum_{x\in S}
+\sum_{i=1}^N
+\lvert
+u_{G_1}(x,i) - u_{G_2}(x,i)
+\rvert.
+\label{eq:empirical_metric}
+\end{equation}
+
+\begin{theorem}
+Assume the conditional estimators satisfy \eqref{eq:conditional_tree_rate} with errors $\epsilon_1,\epsilon_2$, and that the learned full conditionals are strictly positive on the effective support. Then
+\[
+\big|
+\hat d(D_1,D_2) - d(P_1,P_2)
+\big|
+=
+O_p\!\left(
+(MN)^{-1/2}
++
+\epsilon_1
++
+\epsilon_2
+\right).
+\]
+\end{theorem}
+
+\begin{IEEEproof}
+The quantity 
+$\hat d - d(P_1,P_2)$
+admits the decomposition
+\[
+\lvert \hat d - d(G_1,G_2)\rvert
++
+\lvert d(G_1,G_2) - d(P_1,P_2)\rvert.
+\]
+The first term is controlled by Hoeffding’s inequality applied to the bounded random variables 
+$\lvert u_{G_1}(X,i) - u_{G_2}(X,i)\rvert$, and the second by the Lipschitz continuity of $u(\varphi) = \varphi/\max_y\varphi(y)$ on strictly positive simplices, together with \eqref{eq:conditional_tree_rate}. This yields the stated rate.
+\end{IEEEproof}
+\subsection{One-Sided Fidelity: Evaluating Synthetic Data Against a Trusted Real Dataset}
+
+In many practical settings, the goal is not to compare two unknown
+processes symmetrically, but rather to assess how well a synthetic
+dataset $D_{\mathrm{syn}}$ approximates a trusted real dataset
+$D_{\mathrm{real}}$. In such cases it is natural to evaluate
+$D_{\mathrm{syn}}$ using a \emph{single} conditional system learned from
+$D_{\mathrm{real}}$, rather than constructing separate conditional
+learners for both datasets.
+
+Let $\Phi^{(\mathrm{real})}$ be the conditional family fitted on
+$D_{\mathrm{real}}$ alone using any consistent conditional estimator
+(e.g., conditional inference trees). Define
+\[
+\Upsilon_{\mathrm{real}}
+=
+\hat\Upsilon_{\Phi^{(\mathrm{real})}}(D_{\mathrm{real}}),
+\qquad
+\Upsilon_{\mathrm{syn}}
+=
+\hat\Upsilon_{\Phi^{(\mathrm{real})}}(D_{\mathrm{syn}}).
+\]
+The difference
+\[
+\Delta\Upsilon
+=
+\Upsilon_{\mathrm{real}} - \Upsilon_{\mathrm{syn}}
+\]
+provides a natural \emph{fidelity-to-real} score: it quantifies how well
+the synthetic records align with the conditional structure extracted
+from the real data. When $D_{\mathrm{syn}}$ is drawn from a process
+close to the real data-generating law $P_{\mathrm{real}}$, we expect
+$\Upsilon_{\mathrm{syn}}$ to be close to
+$\Upsilon_{\mathrm{real}}$. Conversely, structural distortions in the
+synthetic distribution manifest as systematic decreases in
+$\Upsilon_{\mathrm{syn}}$.
+
+This one-sided measure is computationally simpler than the symmetric
+distance $d(P_1,P_2)$ and often of primary interest in applications where
+$D_{\mathrm{real}}$ is the reference dataset. The two-sided metric
+becomes essential when comparing two arbitrary datasets on equal footing,
+or when estimating the true distance between underlying generative
+processes.
+
+\subsection{Consistency of the Dataset Distance as a Metric on Processes}
+
+\begin{theorem}[Convergence to the Population Metric]
+Let $D_1$ and $D_2$ be drawn i.i.d.\ from strictly positive processes $P_1$ and $P_2$. Suppose the conditional generators satisfy 
+$\sup_{x^{-i}}
+\lvert
+\varphi^{i,k} - P_{k,i}
+\rvert
+\le \epsilon_k$ 
+with $\epsilon_k\to 0$ in probability as $|D_k|\to\infty$, and suppose the test-set size $M\to\infty$. Then
+\begin{equation}
+\hat d(D_1,D_2)
+\xrightarrow{p}
+d(P_1,P_2).
+\label{eq:limit_metric}
+\end{equation}
+\end{theorem}
+
+\begin{IEEEproof}
+From the previous theorem we have
+\[
+\big|
+\hat d(D_1,D_2) - d(P_1,P_2)
+\big|
+=
+O_p\!\left(
+(MN)^{-1/2}
++
+\epsilon_1
++
+\epsilon_2
+\right).
+\]
+As $M\to\infty$ and $|D_k|\to\infty$, both $(MN)^{-1/2}$ and $\epsilon_k$ converge to zero in probability, which implies \eqref{eq:limit_metric}.
+\end{IEEEproof}
+
+\begin{corollary}
+If $P_1=P_2$, then $\hat d(D_1,D_2)\xrightarrow{p}0$.  
+If $P_1\neq P_2$ differ in their full conditional structure on any set of positive $\mu$-measure, then $\hat d(D_1,D_2)\xrightarrow{p}d(P_1,P_2)>0$.
+\end{corollary}
+
+
+
+\subsection{Pseudocode for Estimating the MAP-Alignment Distance}
+
+To make the computation explicit, Algorithm~\ref{alg:distance} summarizes the empirical distance estimation between two datasets $D_1$ and $D_2$ via their trained conditional  generator families $G_1$ and $G_2$.
+
+
+
+\begin{algorithm}[!ht]
+\DontPrintSemicolon
+\SetKwInOut{Input}{Input}
+\SetKwInOut{Output}{Output}
+
+\Input{
+  Test dataset $D_{\mathrm{test}} = \{x^{(k)}\}_{k=1}^M$, \\
+  Conditional kernels $\{\varphi_i(\cdot \mid x^{-i})\}_{i=1}^N$, \\
+  Finite state spaces $\{\mathcal{X}^i\}_{i=1}^N$ for each coordinate.
+}
+\Output{
+  Per-sample MAP-alignment matrix $\upsilon^{(k)}_i$, \\
+  Aggregate MAP-alignment score $\Upsilon(D_{\mathrm{test}})$.
+}
+
+Initialize $\Upsilon \leftarrow 0$\;
+
+\For{$k \leftarrow 1$ \KwTo $M$}{
+  \For{$i \leftarrow 1$ \KwTo $N$}{
+    Let $x^{(k)}_i$ be the $i$-th coordinate of sample $x^{(k)}$\;
+    Let $x^{(k),-i}$ be all coordinates of $x^{(k)}$ except $i$\;
+
+    \tcp{Compute model conditional for the observed value}
+    $p_{\text{obs}} \leftarrow \varphi_i\big(x^{(k)}_i \mid x^{(k),-i}\big)$\;
+
+    \tcp{Compute maximum conditional probability over the state space}
+    $p_{\max} \leftarrow 0$\;
+    \ForEach{$y \in \mathcal{X}^i$}{
+      $p_y \leftarrow \varphi_i\big(y \mid x^{(k),-i}\big)$\;
+      \If{$p_y > p_{\max}$}{
+        $p_{\max} \leftarrow p_y$\;
+      }
+    }
+
+    \tcp{MAP-alignment for sample $k$, coordinate $i$}
+    $\upsilon^{(k)}_i \leftarrow \dfrac{p_{\text{obs}}}{p_{\max}}$\;
+
+    \tcp{Accumulate for the aggregate score}
+    $\Upsilon \leftarrow \Upsilon + \upsilon^{(k)}_i$\;
+  }
+}
+
+\tcp{Normalize by number of samples and coordinates}
+$\Upsilon(D_{\mathrm{test}}) \leftarrow \dfrac{\Upsilon}{M \cdot N}$\;
+
+\Return $\{\upsilon^{(k)}_i\}_{k=1,\dots,M}^{i=1,\dots,N}$, $\Upsilon(D_{\mathrm{test}})$\;
+
+\caption{Computation of the MAP-alignment functional $\upsilon$ and aggregate score $\Upsilon(D_{\mathrm{test}})$}
+\label{alg:map_alignment}
+\end{algorithm}
+\begin{algorithm}[t]
+\caption{One-Sided MAP-Alignment Fidelity to a Trusted Real Dataset}
+\label{alg:onesided_fidelity}
+\DontPrintSemicolon
+\SetKwInOut{Input}{Input}
+\SetKwInOut{Output}{Output}
+
+\Input{
+Real dataset $D_{\mathrm{real}}$;\\
+Synthetic dataset $D_{\mathrm{syn}}$;\\
+Conditional learner $\mathsf{LearnConditionals}$;\\
+Significance level $\alpha \in (0,1)$.
+}
+
+\Output{
+Estimated real MAP-alignment $\hat\Upsilon_{\mathrm{real}}$;\\
+Estimated synthetic MAP-alignment $\hat\Upsilon_{\mathrm{syn}}$;\\
+Fidelity score $\Delta\hat\Upsilon$ and $(1-\alpha)$ confidence interval.
+}
+
+Fit conditional family on real data\\
+\Indp
+$\Phi^{(\mathrm{real})} \gets \mathsf{LearnConditionals}(D_{\mathrm{real}})$\\
+\Indm
+
+Compute MAP-alignment on real data\\
+\Indp
+$M_{\mathrm{real}} \gets |D_{\mathrm{real}}|$\\
+$A_{\mathrm{real}} \gets 0$\\
+\ForEach{$x \in D_{\mathrm{real}}$}{
+  \For{$i \gets 1$ \KwTo $N$}{
+    Compute $\varphi_i(x_i \mid x_{-i})$ from $\Phi^{(\mathrm{real})}$\\
+    Compute $m_i(x) \gets \max_{y \in \mathcal{X}^i} \varphi_i(y \mid x_{-i})$\\
+    Compute $\upsilon(x,i) \gets \varphi_i(x_i \mid x_{-i}) / m_i(x)$\\
+    $A_{\mathrm{real}} \gets A_{\mathrm{real}} + \upsilon(x,i)$
+  }
+}
+$\hat\Upsilon_{\mathrm{real}} \gets A_{\mathrm{real}} / (M_{\mathrm{real}} N)$\\
+\Indm
+
+Compute MAP-alignment on synthetic data using the same conditionals\\
+\Indp
+$M_{\mathrm{syn}} \gets |D_{\mathrm{syn}}|$\\
+$A_{\mathrm{syn}} \gets 0$\\
+\ForEach{$x \in D_{\mathrm{syn}}$}{
+  \For{$i \gets 1$ \KwTo $N$}{
+    Compute $\varphi_i(x_i \mid x_{-i})$ from $\Phi^{(\mathrm{real})}$\\
+    Compute $m_i(x) \gets \max_{y \in \mathcal{X}^i} \varphi_i(y \mid x_{-i})$\\
+    Compute $\upsilon(x,i) \gets \varphi_i(x_i \mid x_{-i}) / m_i(x)$\\
+    $A_{\mathrm{syn}} \gets A_{\mathrm{syn}} + \upsilon(x,i)$
+  }
+}
+$\hat\Upsilon_{\mathrm{syn}} \gets A_{\mathrm{syn}} / (M_{\mathrm{syn}} N)$\\
+\Indm
+
+Compute fidelity score\\
+$\Delta\hat\Upsilon \gets \hat\Upsilon_{\mathrm{real}} - \hat\Upsilon_{\mathrm{syn}}$\\
+
+Compute Hoeffding-based confidence radius for $\Delta\hat\Upsilon$\\
+$r_{\mathrm{real}} \gets \sqrt{\frac{1}{2 M_{\mathrm{real}} N} \log\!\left(\frac{4}{\alpha}\right)}$\\
+$r_{\mathrm{syn}} \gets \sqrt{\frac{1}{2 M_{\mathrm{syn}} N} \log\!\left(\frac{4}{\alpha}\right)}$\\
+$r_{\Delta} \gets r_{\mathrm{real}} + r_{\mathrm{syn}}$\\
+
+Construct $(1-\alpha)$ confidence interval (clipped to $[-1,1]$)\\
+$L \gets \max\{-1, \Delta\hat\Upsilon - r_{\Delta}\}$\\
+$U \gets \min\{1, \Delta\hat\Upsilon + r_{\Delta}\}$\\
+
+\Return{$\hat\Upsilon_{\mathrm{real}}, \hat\Upsilon_{\mathrm{syn}}, \Delta\hat\Upsilon, [L, U]$}
+
+\end{algorithm}
+
+\begin{algorithm}[t]
+\caption{Estimation of MAP-alignment distance and confidence interval}
+\label{alg:distance}
+\DontPrintSemicolon
+\SetKwInOut{Input}{Input}
+\SetKwInOut{Output}{Output}
+
+\Input{
+Datasets $D_1$ and $D_2$;\\
+Trained conditional  generator families $G_1$ and $G_2$ with conditional families $\Phi^{(1)}$ and $\Phi^{(2)}$;\\
+Number of variables $N$;\\
+Significance level $\alpha \in (0,1)$ (for a $(1-\alpha)$ confidence interval);\\
+Bounds on conditional estimation error $\epsilon_1,\epsilon_2$ for $G_1,G_2$.
+}
+\Output{
+Empirical distance $\hat d(D_1,D_2)$ and $(1-\alpha)$ confidence interval $[L, U]$ for $d(P_1,P_2)$.
+}
+
+Construct the pooled set $S \gets D_1 \cup D_2$ \\
+Initialize accumulator $A \gets 0$ \\
+Let $M \gets |S|$ \\
+
+\ForEach{$x \in S$}{
+  \For{$i \gets 1$ \KwTo $N$}{
+    Compute 
+    $\upsilon_1 \gets \upsilon_{\Phi^{(1)}}(x,i)$ using \eqref{eq:upsilon_definition} \\
+    Compute 
+    $\upsilon_2 \gets \upsilon_{\Phi^{(2)}}(x,i)$ using \eqref{eq:upsilon_definition} \\
+    Set $A \gets A + \lvert \upsilon_1 - \upsilon_2\rvert$ \\
+  }
+}
+
+Set $\hat d(D_1,D_2) \gets A / (MN)$ \\
+
+Compute the Hoeffding test-noise radius
+\[
+r_{\text{test}} \gets 
+\sqrt{\frac{1}{2MN}\log\left(\frac{2}{\alpha}\right)}
+\]
+
+Set the total radius
+\[
+r_{\text{total}} \gets r_{\text{test}} + (\epsilon_1 + \epsilon_2)
+\]
+
+Compute confidence interval bounds
+\[
+L \gets \max\{0,\ \hat d(D_1,D_2) - r_{\text{total}}\}
+\]
+\[
+U \gets \min\{1,\ \hat d(D_1,D_2) + r_{\text{total}}\}
+\]
+
+\Return{$\hat d(D_1,D_2)$, $L$, $U$}
+\end{algorithm}
+
+\subsection{Finite-Sample Uncertainty and Numerical Examples}
+
+For confidence level $1-\delta$, Hoeffding’s inequality \cite{hoeffding1963} yields
+\[
+\lvert \hat d(D_1,D_2) - d(G_1,G_2)\rvert
+\le
+\sqrt{
+\frac{1}{2MN}
+\log\!\frac{2}{\delta}
+}
+\]
+with probability at least $1-\delta$. Adding conditional estimation error gives
+\[
+\lvert \hat d(D_1,D_2) - d(P_1,P_2)\rvert
+\le
+\sqrt{
+\frac{1}{2MN}
+\log\!\frac{2}{\delta}
+}
++
+(\epsilon_1+\epsilon_2).
+\]
+
+\textit{Example 1 (Moderate dataset).}
+Let $N=100$, $M=100$, $\epsilon_1=\epsilon_2=0.05$, and $\delta=0.05$. Then
+\[
+\sqrt{
+\frac{1}{2MN}\log(40)
+}
+\approx
+0.0136,
+\qquad
+\epsilon_1+\epsilon_2=0.10,
+\]
+so the total uncertainty radius is approximately $0.1136$. An observed value $\hat d(D_1,D_2)=0.40$ is therefore consistent with a true distance $d(P_1,P_2)$ lying roughly in $[0.29, 0.51]$.
+
+\textit{Example 2 (Large test set, improved conditionals).}
+Let $N=100$, $M=1000$, $\epsilon_1=\epsilon_2=0.02$, and $\delta=0.05$. Then
+\[
+\sqrt{
+\frac{1}{2MN}\log(40)
+}
+\approx
+0.0043,
+\qquad
+\epsilon_1+\epsilon_2=0.04,
+\]
+giving a total bound near $0.0443$. An empirical distance $\hat d(D_1,D_2)=0.20$ then implies $d(P_1,P_2)$ is concentrated in the interval $[0.156, 0.244]$.
+
+These values show that the MAP-alignment geometry yields a statistically well-controlled and data-efficient method for distinguishing whether two datasets arise from the same underlying conditional generators.
+
+
+
+
+
+
+
+\section{Low-Order Moment Matching is Insufficient: Two Illustrative Examples}\label{sec:examples}
+
+Comparing columnwise means, variances, or covariance matrices is a common practice
+for evaluating synthetic tabular data. However, agreement in these
+low-order summaries does \emph{not} imply that two datasets share
+similar joint or conditional structure. We present two examples in $\mathbb{R}^3$
+that highlight this gap: in both cases, the synthetic and real datasets
+match exactly in all first- and second-order moments, yet differ
+substantially in their conditional behavior. In each case, the
+MAP-alignment statistic $\upsilon$ reveals discrepancies that covariance
+structures alone cannot detect.
+
+\subsection{Example 1: Uniform vs.\ Gaussian with Identical Moments}
+
+Consider the following two distributions on $\mathbb{R}^3$:
+
+\[
+X^{(U)} \sim \mathrm{Uniform}([-\sqrt{3},\sqrt{3}]^3),
+\qquad
+X^{(G)} \sim \mathcal{N}_3(0,I_3).
+\]
+
+Both satisfy
+\[
+\mathbb{E}[X^{(U)}]
+=
+\mathbb{E}[X^{(G)}]
+=
+0,
+\qquad
+\mathrm{Cov}(X^{(U)})
+=
+\mathrm{Cov}(X^{(G)})
+=
+I_3.
+\]
+Hence all marginal means, variances, and the full covariance matrix
+coincide.
+
+Yet their conditional structures differ sharply. For $X^{(U)}$, each
+coordinate has a flat conditional density on $[-\sqrt{3},\sqrt{3}]$,
+yielding
+\[
+\upsilon(X^{(U)}, i) = 1
+\quad\text{for almost every sample}.
+\]
+For $X^{(G)}$, the $i$th coordinate conditional is
+$X^{(G)}_i \mid X^{(G)}_{-i} \sim \mathcal{N}(0,1)$, giving
+\[
+\upsilon(X^{(G)}, i)
+=
+\exp\!\left(-\tfrac12 X^{(G)}_i{}^2\right),
+\]
+with mean approximately $0.71$. Thus, although the datasets match in mean
+and covariance, the MAP-alignment values differ substantially:
+\[
+\Upsilon(X^{(U)}) \approx 1,
+\qquad
+\Upsilon(X^{(G)}) \approx 0.7.
+\]
+Low-order moments fail to detect this discrepancy.
+
+\subsection{Example 2: Matching Non-Identity Covariances with Distinct Conditionally}
+
+To demonstrate that the limitation persists even when the covariance
+matrix is nontrivial, apply the same invertible linear map
+\[
+L
+=
+\begin{pmatrix}
+1 & \rho & 0\\
+0 & 1     & \rho\\
+0 & 0     & 1
+\end{pmatrix},
+\qquad 0 < \rho < 1,
+\]
+to both datasets and define
+\[
+Y^{(U)} = L X^{(U)},
+\qquad
+Y^{(G)} = L X^{(G)}.
+\]
+
+Both transformed datasets have the \emph{same} non-identity covariance
+matrix
+\[
+\mathrm{Cov}(Y^{(U)})
+=
+\mathrm{Cov}(Y^{(G)})
+=
+\Sigma
+=
+L L^{\!\top},
+\]
+and share identical columnwise means and variances.
+
+However, their conditional distributions remain fundamentally different.
+Since $Y^{(U)}$ is the image of a uniform cube under a linear shear, each
+conditional $Y^{i,(U)} \mid Y^{-i,(U)}$ is uniform on a finite
+interval (given by the intersection of a line with a parallelepiped),
+implying
+\[
+\upsilon(Y^{(U)}, i) \approx 1.
+\]
+
+Conversely, $Y^{(G)} \sim \mathcal{N}_3(0,\Sigma)$ has
+linear--Gaussian conditionals. If
+$Y^{i,(G)} \mid Y^{-i,(G)} \sim \mathcal{N}(m_i(y^{-i}), \sigma_i^2)$,
+then
+\[
+\upsilon(Y^{(G)}, i)
+=
+\exp\!\left(
+-\tfrac12 (y^i - m_i(y^{-i}))^2 / \sigma_i^2
+\right),
+\]
+with empirical means typically in the range $0.7$--$0.8$.
+
+Thus, even though $Y^{(U)}$ and $Y^{(G)}$ agree in all first- and
+second-order statistics, their conditional behavior differs markedly,
+and the MAP-alignment statistic again reveals the discrepancy:
+\[
+\Upsilon(Y^{(U)}) \approx 1,
+\qquad
+\Upsilon(Y^{(G)}) \approx 0.7\text{--}0.8.
+\]
+
+\subsection{Implications}
+
+These examples demonstrate that matching means, variances, or full
+covariance matrices (even with non-identity structure) is insufficient
+to conclude that two datasets arise from similar generative processes.
+Higher-order structure, multimodality, support geometry, and conditional
+relationships can remain entirely undetected by low-order moments.
+MAP-alignment, by directly assessing conditional fidelity, exposes such
+differences immediately.
+
+
+\section{Applications: Comparing Synthesizers}\label{sec:applications}
+
+
+
+
+
+
+
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{lsyn}
+
+
+\end{document}
+
