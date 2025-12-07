@@ -3,6 +3,7 @@ MANIFEST.in
 README.md
 README.rst
 setup.py
+version.py
 lsynth/__init__.py
 lsynth/conditionals.py
 lsynth/core.py
