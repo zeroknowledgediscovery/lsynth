@@ -2,7 +2,6 @@ lsynth
 =================
 
 MAP-alignment fidelity and dataset distance for synthetic tabular data
----------------------------------------------------------------------
 
 This package implements the one-sided MAP-alignment fidelity statistic
 introduced by Chattopadhyay *et al.* and described in the manuscript
@@ -43,7 +42,7 @@ Interpretation
 
 - ~1.0: synthetic matches conditional structure closely
 - ~0.7: Gaussian-like distortions
-- << 0.7: strong structural mismatch
+- < 0.7: strong structural mismatch
 
 Why MAP-alignment?
 ------------------
@@ -76,7 +75,7 @@ Relationship to Theory
 This package implements practical instantiations of:
 
 - Eq. (2): MAP-alignment for a coordinate
-- Eq. (3): aggregate Υ
+- Eq. (3): aggregate Upsilon
 - Algorithm 2: one-sided fidelity score
 - Section VI: uncertainty (Hoeffding bounds)
 
