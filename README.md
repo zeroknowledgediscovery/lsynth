@@ -1,10 +1,12 @@
-# UPSILON-FIDELITY
+# lsynth
 
 **MAP-alignment fidelity and dataset distance for synthetic tabular data**
 
 This package implements the one-sided MAP-alignment fidelity statistic
 introduced by Chattopadhyay *et al.*
 and described in the manuscript “How Good Is Your Synthetic Data?”.
+
+Fully compatible with extrnally generated synthetic data. This tool is primarily aimed for evaluation of generated synthetic data, although generators are also included.
 
 The core idea:
 
@@ -31,13 +33,7 @@ Low Υ => structural distortion (even if marginals/covariance match)
 ## Installation
 
 ```bash
-pip install upsilon-fidelity
-```
-
-Optional CTGAN:
-
-```bash
-pip install upsilon-fidelity[ctgan]
+pip install lsynth
 ```
 
 ---
@@ -46,7 +42,7 @@ pip install upsilon-fidelity[ctgan]
 
 ```python
 import pandas as pd
-from upsilon_fidelity import compute_upsilon
+from lsynth import compute_upsilon
 
 df_real = pd.read_csv("gss_2018.csv").sample(200)
 
