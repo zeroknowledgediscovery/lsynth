@@ -10,6 +10,16 @@ from tqdm import tqdm
 from quasinet.qnet import load_qnet
 from quasinet.qsampling import qsample
 
+import os
+import sys
+from contextlib import contextmanager, redirect_stdout, redirect_stderr
+
+@contextmanager
+def silence_output():
+    """Brute-force: silence *all* prints/warnings/logging to stdout+stderr inside the block."""
+    with open(os.devnull, "w") as fnull:
+        with redirect_stdout(fnull), redirect_stderr(fnull):
+            yield
 
 # ---------------------------------------------------------------------------
 # Internal baseline generator (independent columns)
@@ -150,11 +160,13 @@ def generate_syndata(
         from sdv.metadata import SingleTableMetadata
         from sdv.single_table import CTGANSynthesizer
 
-        metadata = SingleTableMetadata()
-        metadata.detect_from_dataframe(data=orig_df)
 
-        synthesizer = CTGANSynthesizer(metadata)
-        synthesizer.fit(orig_df)
+        with silence_output():
+            metadata = SingleTableMetadata()
+            metadata.detect_from_dataframe(data=orig_df)
+
+            synthesizer = CTGANSynthesizer(metadata)
+            synthesizer.fit(orig_df)
 
         df_syn = synthesizer.sample(num_rows=num)
         df_syn = df_syn[feature_names]
