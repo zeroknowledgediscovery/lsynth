@@ -35,26 +35,6 @@ Installation
     pip install lsynth
 
 
-Quick Example
--------------
-
-.. code-block:: python
-
-    import pandas as pd
-    from lsynth import compute_upsilon
-
-    df_real = pd.read_csv("gss_2018.csv").sample(200)
-
-    ups_lsm, syn_lsm = compute_upsilon(
-        num=100,
-        model_path="gss_2018.joblib",
-        generate=True,
-        gen_algorithm="LSM",
-        orig_df=df_real,
-        n_workers=8,
-    )
-
-    print("LSM mean Upsilon:", ups_lsm.mean())
 
 Interpretation
 --------------
