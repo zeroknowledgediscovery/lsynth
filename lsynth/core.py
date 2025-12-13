@@ -109,7 +109,10 @@ def generate_syndata(
             feature_names = list(model.feature_names)
 
     if feature_names is None:
-        raise ValueError("feature_names is undefined (required for BASELINE/CTGAN column checks).")
+        if orig_df is None:
+            raise ValueError("feature_names is undefined (required for BASELINE/CTGAN column checks).")
+        else:
+            feature_names = list(orig_df.columns.values)
        
     M = len(feature_names)
 
