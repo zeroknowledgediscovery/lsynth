@@ -3,17 +3,24 @@
 **MAP-alignment fidelity and dataset distance for synthetic tabular data**
 
 This package implements the one-sided MAP-alignment fidelity statistic
-introduced by Chattopadhyay *et al.*
-and described in the manuscript “How Good Is Your Synthetic Data?”.
+introduced by Chattopadhyay *et al.* and described in the manuscript
+“How Good Is Your Synthetic Data?”.
 
-Fully compatible with extrnally generated synthetic data. This tool is primarily aimed for evaluation of generated synthetic data, although generators are also included.
+The package cleanly separates **synthetic data generation** from **evaluation**:
 
-The core idea:
+* `generate_syndata(...)` produces synthetic tabular data using multiple generators.
+* `compute_upsilon(df, ...)` evaluates MAP-alignment fidelity on *any* external DataFrame.
 
-> For a synthetic record to be realistic, each coordinate should agree
-> with the conditional MAP prediction inferred from real data.
+The library is fully compatible with externally generated synthetic data and is primarily aimed at **evaluation**, although several reference generators are included.
 
-Formally, for a data record x and coordinate i:
+---
+
+## Core Idea
+
+For a synthetic record to be realistic, each coordinate should agree
+with the conditional MAP prediction inferred from real data.
+
+For a data record `x` and coordinate `i`:
 
 ```
 υ(x, i) = φ_i(x_i | x_{-i}) / max_y φ_i(y | x_{-i})
@@ -22,11 +29,11 @@ Formally, for a data record x and coordinate i:
 Averaged over samples and coordinates:
 
 ```
-Υ(D) in [0,1]
+Υ(D) ∈ [0, 1]
 ```
 
-High Υ => synthetic preserves *real conditional structure*  
-Low Υ => structural distortion (even if marginals/covariance match)
+* **High Υ** ⇒ synthetic preserves *real conditional structure*
+* **Low Υ** ⇒ structural distortion (even if marginals or covariance match)
 
 ---
 
@@ -38,65 +45,115 @@ pip install lsynth
 
 ---
 
-## Quick Example
+## Synthetic Data Generation
+
+Synthetic data generation is handled by `generate_syndata`, which always returns a **pandas DataFrame** whose columns exactly match the target feature space.
 
 ```python
-import pandas as pd
-from lsynth import compute_upsilon
+from lsynth import generate_syndata
+```
 
-df_real = pd.read_csv("gss_2018.csv").sample(200)
+### Supported Generators
 
-ups_lsm, syn_lsm = compute_upsilon(
-    num=100,
+* **`"LSM"`**
+  Uses a trained QuasiNet model as a generative model via `qsample`.
+
+* **`"BASELINE"`**
+  Independent-column null model (Gaussian for numeric, categorical sampling for discrete).
+
+* **`"CTGAN"`**
+  Uses SDV’s `CTGANSynthesizer`.
+
+* **Custom generators**
+  Any user-defined function returning a DataFrame with the correct columns.
+
+### Example: LSM Generation
+
+```python
+df_lsm = generate_syndata(
+    num=1000,
     model_path="gss_2018.joblib",
-    generate=True,
     gen_algorithm="LSM",
+    n_workers=8,
+)
+```
+
+### Example: Baseline Generator
+
+```python
+df_baseline = generate_syndata(
+    num=1000,
+    gen_algorithm="BASELINE",
     orig_df=df_real,
+    feature_names=df_real.columns.tolist(),
+)
+```
+
+### Example: CTGAN Generator
+
+```python
+df_ctgan = generate_syndata(
+    num=1000,
+    gen_algorithm="CTGAN",
+    orig_df=df_real,
+    feature_names=df_real.columns.tolist(),
+)
+```
+
+---
+
+## MAP-Alignment Fidelity Evaluation
+
+Evaluation is handled **only** by `compute_upsilon`, which operates on an external DataFrame.
+
+```python
+from lsynth import compute_upsilon
+```
+
+```python
+ups, _ = compute_upsilon(
+    df=df_lsm,
+    model_path="gss_2018.joblib",
     n_workers=8,
 )
 
-print("LSM mean Upsilon:", ups_lsm.mean())
+print("Mean Υ:", ups.mean())
 ```
 
-Interpretation:
+Key properties:
 
-- ~1.0: synthetic matches conditional structure closely
-- ~0.7: Gaussian-like distortions
-- <<0.7: strong structural mismatch
+* No data generation occurs inside `compute_upsilon`
+* Columns must match `model.feature_names` exactly and in order
+* Works identically for real or synthetic data
 
 ---
 
-## Why MAP-alignment?
+## Example Notebook
+
+See **`example2.ipynb`** for a complete, reproducible workflow:
+
+1. Load real data
+2. Generate synthetic datasets using multiple generators
+3. Compute and compare MAP-alignment fidelity
+4. Interpret structural degradation across generators
+
+---
+
+## Why MAP-Alignment?
 
 Because **covariance matching is insufficient**.
 
-Section VII of the manuscript gives explicit examples where:
-- Real and synthetic share identical means, variances, covariance matrices
-- Yet they differ *strongly* in conditional structure  
-- MAP-alignment catches the discrepancy immediately
+The manuscript shows explicit counterexamples where:
+
+* Real and synthetic data share identical means, variances, and covariance matrices
+* Yet differ strongly in higher-order and conditional structure
+* MAP-alignment detects the discrepancy immediately
 
 This method:
-- Detects nonlinear and higher-order structure
-- Avoids feature-embedding artifacts
-- Comes with finite-sample uncertainty control
 
----
-
-## Supported Generators
-
-- `"LSM"`: use QuasiNet as a generative model via qsample  
-- `"BASELINE"`: independent-column null model  
-- `"CTGAN"`: uses SDV CTGAN synthesizer  
-- Custom generators also supported
-
----
-
-## ToDo
-
-Implement
-
-- uncertainty (Hoeffding bounds)
-
+* Detects nonlinear and higher-order dependencies
+* Avoids embedding or representation artifacts
+* Comes with finite-sample uncertainty control
 
 ---
 
