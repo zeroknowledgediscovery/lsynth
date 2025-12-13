@@ -68,23 +68,31 @@ def generate_syndata(
     data_generator: Optional[Callable[..., pd.DataFrame]] = None,
     n_workers: int = 1,
     verbose: bool = True,
+    feature_names: Optional[list[str]] = None,  # NEW (default None)        
 ) -> pd.DataFrame:
     """
     Generate a synthetic DataFrame with `num` rows whose columns match
-    `model.feature_names`.
+    `feature_names` (if provided) or else `model.feature_names`.
 
     Supported `gen_algorithm` values:
 
-      - "LSM": use `qsample` on a null symbol vector of length M.
-      - "BASELINE": independent-column Gaussian/categorical model fit to `orig_df`.
-      - "CTGAN": SDV CTGANSynthesizer fit to `orig_df`.
-      - anything else: use `data_generator(model=model, num=num, orig_df=orig_df)`.
+      - "LSM": uses `qsample` with a null symbol vector of length M; requires a QNet model
+               (either `model` or `model_path`). If `feature_names` is not provided, it is
+               taken from `model.feature_names`.
+      - "BASELINE": independent-column Gaussian/categorical model fit to `orig_df`;
+                   requires `orig_df` and `feature_names` (or a model to infer them).
+      - "CTGAN": SDV `CTGANSynthesizer` fit to `orig_df`; requires `orig_df` and
+                 `feature_names` (or a model to infer them).
+      - otherwise: calls `data_generator(model=model, num=num, orig_df=orig_df, feature_names=feature_names)`
+                   and expects a DataFrame with columns exactly equal to `feature_names`.
 
-    For "BASELINE" and "CTGAN", `orig_df` must be provided and its columns must
-    match `model.feature_names` exactly and in order.
+    For "BASELINE" and "CTGAN", `orig_df` must be provided and its columns must match
+    `feature_names` exactly and in the same order.
 
-    Returns a pandas DataFrame of shape (num, M) with columns equal to
-    `model.feature_names`.
+    Returns
+    -------
+    pandas.DataFrame
+        A DataFrame of shape (num, M) with columns exactly equal to `feature_names`.
     """
     # Ensure we have a model ONLY if we need it (LSM or custom that wants it)
     needs_model = (gen_algorithm == "LSM") or (data_generator is not None)
@@ -98,7 +106,11 @@ def generate_syndata(
             print(f"Loading model from {model_path} ...")
             model = load_qnet(model_path)
 
-    feature_names = list(model.feature_names)
+            feature_names = list(model.feature_names)
+
+    if feature_names is None:
+        raise ValueError("feature_names is undefined (required for BASELINE/CTGAN column checks).")
+       
     M = len(feature_names)
 
     # LSM: use qsample starting from null vector
