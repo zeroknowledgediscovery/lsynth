@@ -86,15 +86,17 @@ def generate_syndata(
     Returns a pandas DataFrame of shape (num, M) with columns equal to
     `model.feature_names`.
     """
-    # Ensure we have a model
-    if model is None:
+    # Ensure we have a model ONLY if we need it (LSM or custom that wants it)
+    needs_model = (gen_algorithm == "LSM") or (data_generator is not None)
+    
+    if needs_model and model is None:
         if model_path is None:
             raise NotImplementedError(
                 "Model-free generation not implemented; provide `model` or `model_path`."
             )
         if verbose:
             print(f"Loading model from {model_path} ...")
-        model = load_qnet(model_path)
+            model = load_qnet(model_path)
 
     feature_names = list(model.feature_names)
     M = len(feature_names)
