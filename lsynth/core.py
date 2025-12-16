@@ -231,7 +231,8 @@ def compute_upsilon(
     model_path: Optional[str] = None,
     n_workers: int = 1,
     verbose: bool = True,
-) -> Tuple[np.ndarray, pd.DataFrame]:
+    alpha:  Optional[float] = None,                 # NEW: confidence level
+) -> Tuple[np.ndarray, pd.DataFrame, Dict[str, float]]:
     """
     Compute Upsilon = model.average_fidelity(row)[0] for each row of an
     external DataFrame.
@@ -285,7 +286,8 @@ def compute_upsilon(
 
     X = df.to_numpy().astype(str)
     n_rows = X.shape[0]
-
+    n_feat = len(feature_names)
+    
     if verbose:
         print(f"Computing Upsilon on DataFrame with {n_rows} rows ...")
 
@@ -305,4 +307,24 @@ def compute_upsilon(
             )
 
     upsilon = np.array([upsilon_list[i][0] for i in range(len(upsilon_list))])
+
+    if alpha is not None:
+        N = max(1, n_rows * n_feat)
+        if not (0.0 < alpha < 1.0):
+            raise ValueError("delta must be in (0, 1).")
+
+        eps = float(np.sqrt(np.log(2.0 / alpha) / (2.0 * N)))
+
+        mean_u = float(upsilon.mean())
+        summary = {
+            "n_rows": float(n_rows),
+            "n_features": float(n_feat),
+            "upsilon_mean": mean_u,
+            "upsilon_semibound_hoeffding": eps,      # radius
+            "upsilon_ci_lower": mean_u - eps,
+            "upsilon_ci_upper": mean_u + eps,
+            "alpha": float(alpha),
+        }
+        return upsilon, df, summary
+    
     return upsilon, df

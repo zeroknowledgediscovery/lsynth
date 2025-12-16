@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Fedora 39) (preloaded format=pdflatex 2025.10.30)  5 DEC 2025 18:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Fedora 39) (preloaded format=pdflatex 2025.10.30)  16 DEC 2025 13:15
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -515,73 +515,35 @@ m/n/10 E\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 X[]\OT1/cmr/m/n/10 ] = 0\OML/cmm/m/it
 /it/10 X[]\OT1/cmr/m/n/10 ) = \OML/cmm/m/it/10 I[]:
  []
 
-[5] (./main.bbl)
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
-[leftcolumn badness]: 1000000 on 158.5021pt
-[rightcolumn badness]: 1000000 on 158.5021pt
+[5] (./main.bbl [6])
+[leftcolumn badness]: 1000000 on 18.0pt
+[rightcolumn badness]: 1000000 on 18.0pt
+[leftcolumn badness]: 1000000 on 18.0pt
+[rightcolumn badness]: 1000000 on 18.0pt
 - LAST -
-Extra skip:8.53764pt
-Left:648.60457pt/2.16492pt
-Right:640.49991pt/1.73193pt
-Split: 665.55223pt
-Output:665.55223pt
-Pageshrink: 2.35007pt
-Pagestretch: 21.8pt
+Extra skip:0.0pt
+Left:192.0pt/1.73193pt
+Right:192.0pt/1.73193pt
+Split: 192.5pt
+Output:192.5pt
+Pageshrink: 0.0pt
+Pagestretch: 0.0pt
 @colht:696.0pt
-FLUSHEND [output]: 665.55223pt
-FLUSHEND [leftcolumn badness]: 1
-FUSHEND [rightcolumn badness]: 174
- [6] (./main.aux)
+FLUSHEND [output]: 192.5pt
+FLUSHEND [leftcolumn badness]: 0
+FUSHEND [rightcolumn badness]: 0
+ [7] (./main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 73A0C1C776EF9B73286DC71B29EF85B7;5929.
+(rerunfilecheck)             Checksum: 9EBFB345F72D13B264174A002EB12110;6158.
  ) 
 Here is how much of TeX's memory you used:
- 10814 strings out of 476041
- 173713 string characters out of 5793163
- 1902388 words of memory out of 12000000
- 31072 multiletter control sequences out of 15000+600000
+ 10820 strings out of 476041
+ 173788 string characters out of 5793163
+ 1885388 words of memory out of 12000000
+ 31073 multiletter control sequences out of 15000+600000
  552768 words of font info for 114 fonts, out of 8000000 for 9000
  1137 hyphenation exceptions out of 8191
- 75i,21n,76p,664b,498s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 75i,21n,76p,664b,583s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texl
@@ -599,10 +561,10 @@ xlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dis
 t/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/
 urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri
 8a.pfb>
-Output written on main.pdf (6 pages, 258286 bytes).
+Output written on main.pdf (7 pages, 263008 bytes).
 PDF statistics:
- 311 PDF objects out of 1000 (max. 8388607)
- 264 compressed objects within 3 object streams
- 71 named destinations out of 1000 (max. 500000)
- 161 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 326 PDF objects out of 1000 (max. 8388607)
+ 278 compressed objects within 3 object streams
+ 76 named destinations out of 1000 (max. 500000)
+ 169 words of extra memory for PDF output out of 10000 (max. 10000000)
 

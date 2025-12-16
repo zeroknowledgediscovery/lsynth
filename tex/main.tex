@@ -954,10 +954,55 @@ differences immediately.
 
 \section{Applications: Comparing Synthesizers}\label{sec:applications}
 
+\subsection{Row-Level Memorization Diagnostic}
+
+While MAP-alignment fidelity $\Upsilon(D)$ quantifies preservation of the
+\emph{conditional structure} of the data distribution, it does not by itself
+address row-level memorization. In particular, a synthetic dataset may achieve
+high $\Upsilon$ while containing records that are nearly identical to specific
+real samples. To explicitly characterize this failure mode, we introduce a
+simple row-level novelty diagnostic.
+
+Let $D_{\mathrm{real}}=\{x^{(1)},\ldots,x^{(n)}\}$ and
+$D_{\mathrm{syn}}=\{y^{(1)},\ldots,y^{(m)}\}$ be real and synthetic datasets
+defined over the same categorical (or discretized) feature space. Using a
+concatenated one-hot embedding $f(\cdot)$, we define cosine similarity
+\begin{equation}
+s(u,v)
+\;=\;
+\frac{\langle f(u), f(v)\rangle}
+{\|f(u)\|_2\,\|f(v)\|_2},
+\end{equation}
+which, for categorical data, reduces to the fraction of coordinates on which two
+records agree.
+
+For each synthetic record $y^{(j)}$, we define its nearest-real similarity
+\begin{equation}
+\eta_j
+\;=\;
+\max_{1 \le i \le n}
+s\!\left(x^{(i)}, y^{(j)}\right).
+\end{equation}
+We summarize row-level memorization via the \emph{lack-of-novelty score}
+\begin{equation}
+\mathcal{N}(D_{\mathrm{syn}})
+\;=\;
+\frac{1}{m}\sum_{j=1}^m \eta_j,
+\end{equation}
+with larger values indicating lower novelty. In particular,
+$\mathcal{N}=1$ corresponds to exact row reuse (e.g., bootstrap resampling),
+while smaller values indicate increasing deviation from any individual real
+record. Tail statistics of $\{\eta_j\}$ (e.g., the $95^{\mathrm{th}}$ percentile)
+capture worst-case near-copying behavior.
+
+This diagnostic is orthogonal to MAP-alignment fidelity:
+$\Upsilon(D)$ measures whether synthetic data respect learned conditional
+dependencies, whereas $\mathcal{N}(D_{\mathrm{syn}})$ measures proximity to
+specific real records. High-quality synthetic data should therefore exhibit
+high $\Upsilon$ and low $\mathcal{N}$. 
 
 
-
-
+So the ideal synthtic dataset should achieve  $\Upsilon \rightarrow 1$, with $\mathcal{N} $ substantially lower than $1$. 
 
 
 
