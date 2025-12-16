@@ -1,9 +1,9 @@
 Metadata-Version: 2.1
 Name: lsynth
-Version: 0.1.25
+Version: 0.1.26
 Summary: Evaluation of how good a synthetic dataset is compared to the original with presuppossing structural constraints
 Home-page: https://github.com/zeroknowledgediscovery/lsynth
-Download-URL: https://github.com/zeroknowledgediscovery/lsynth/archive/0.1.25.tar.gz
+Download-URL: https://github.com/zeroknowledgediscovery/lsynth/archive/0.1.26.tar.gz
 Author: Ishanu Chattopadhyay
 Author-email: research@paraknowledge.ai
 License: LICENSE
