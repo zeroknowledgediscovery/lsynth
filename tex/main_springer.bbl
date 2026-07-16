@@ -1,0 +1,150 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{argyle2023out}
+Argyle, L.P., Busby, E.C., Fulda, N., Gubler, J.R., Rytting, C., Wingate, D.:
+  Out of one, many: Using language models to simulate human samples. Political
+  Analysis  \textbf{31}(3),  337--351 (2023). \doi{10.1017/pan.2022.37}
+
+\bibitem{besag1974}
+Besag, J.: Spatial interaction and the statistical analysis of lattice systems.
+  Journal of the Royal Statistical Society, Series B  \textbf{36}(2),  192--236
+  (1974)
+
+\bibitem{bisbee2024synthetic}
+Bisbee, J., Clinton, J.D., Dorff, C., Kenkel, B., Larson, J.M.: Synthetic
+  replacements for human survey data? the perils of large language models.
+  Political Analysis  \textbf{32}(4),  432--448 (2024).
+  \doi{10.1017/pan.2024.5}
+
+\bibitem{bishop2006pattern}
+Bishop, C.M.: Pattern Recognition and Machine Learning. Springer, New York
+  (2006)
+
+\bibitem{brook1964}
+Brook, D.: On the distinction between conditional and unconditional
+  distributions. Biometrika  \textbf{51}(3--4),  481--483 (1964)
+
+\bibitem{chow1968}
+Chow, C.K., Liu, C.N.: Approximating discrete probability distributions with
+  dependence trees. IEEE Transactions on Information Theory  \textbf{14}(3),
+  462--467 (1968). \doi{10.1109/TIT.1968.1054142}
+
+\bibitem{dankar2022multidimensional}
+Dankar, F.K., Ibrahim, M.K., Ismail, L.: A multi-dimensional evaluation of
+  synthetic data generators. IEEE Access  \textbf{10},  11147--11158 (2022).
+  \doi{10.1109/ACCESS.2022.3144765}
+
+\bibitem{dobrushin1968}
+Dobrushin, R.L.: The description of a random field by means of conditional
+  probabilities and conditions of its regularity. Theory of Probability and its
+  Applications  \textbf{13}(2),  197--224 (1968)
+
+\bibitem{elemam2020seven}
+El~Emam, K.: Seven ways to evaluate the utility of synthetic data. IEEE
+  Security \& Privacy  \textbf{18}(4),  56--59 (2020).
+  \doi{10.1109/MSEC.2020.2992821}
+
+\bibitem{elemam2022utility}
+El~Emam, K., Mosquera, L., Fang, X., El-Hussuna, A.: Utility metrics for
+  evaluating synthetic health data generation methods: Validation study. JMIR
+  Medical Informatics  \textbf{10}(4),  e35734 (2022). \doi{10.2196/35734}
+
+\bibitem{esteban2017realvalued}
+Esteban, C., Hyland, S.L., R{\"a}tsch, G.: Real-valued (medical) time series
+  generation with recurrent conditional {GANs}. arXiv preprint arXiv:1706.02633
+   (2017)
+
+\bibitem{hammersley1971}
+Hammersley, J.M., Clifford, P.: Markov fields on finite graphs and lattices.
+  In: Grimmett, P. (ed.) Markov Random Fields. Springer (2017), originally
+  written in 1971 as an unpublished manuscript
+
+\bibitem{heusel2017gans}
+Heusel, M., Ramsauer, H., Unterthiner, T., Nessler, B., Hochreiter, S.: {GAN}s
+  trained by a two time-scale update rule converge to a local {N}ash
+  equilibrium. In: Advances in Neural Information Processing Systems (NeurIPS)
+  (2017), introduces the Fr\'echet Inception Distance (FID)
+
+\bibitem{hoeffding1963}
+Hoeffding, W.: Probability inequalities for sums of bounded random variables.
+  Journal of the American Statistical Association  \textbf{58}(301),  13--30
+  (1963)
+
+\bibitem{hothorn2006party}
+Hothorn, T., Hornik, K., Zeileis, A.: {party}: A laboratory for recursive
+  partitioning. R News  \textbf{6}(2),  17--23 (2006)
+
+\bibitem{hothorn2006}
+Hothorn, T., Hornik, K., Zeileis, A.: Unbiased recursive partitioning: A
+  conditional inference framework. Journal of Computational and Graphical
+  Statistics  \textbf{15}(3),  651--674 (2006)
+
+\bibitem{jelinek1977perplexity}
+Jelinek, F., Mercer, R.L., Bahl, L.R., Baker, J.K.: Perplexity---a measure of
+  the difficulty of speech recognition tasks. Journal of the Acoustical Society
+  of America  \textbf{62}(S1), ~S63 (1977). \doi{10.1121/1.2016299}
+
+\bibitem{kaabachi2025scoping}
+Kaabachi, B., Despraz, J., Meurers, T., Otte, K., Halilovic, M., Kulynych, B.,
+  Prasser, F., Raisaro, J.L.: A scoping review of privacy and utility metrics
+  in medical synthetic data. npj Digital Medicine  \textbf{8}(1), ~60 (2025).
+  \doi{10.1038/s41746-024-01359-3}
+
+\bibitem{kingma2014autoencoding}
+Kingma, D.P., Welling, M.: Auto-encoding variational bayes. In: Proc.
+  International Conference on Learning Representations (ICLR) (2014),
+  arXiv:1312.6114
+
+\bibitem{kozlowski2025simulating}
+Kozlowski, A.C., Evans, J.A.: Simulating subjects: The promise and peril of
+  artificial intelligence stand-ins for social agents and interactions.
+  Sociological Methods \& Research  \textbf{54}(3),  1017--1073 (2025)
+
+\bibitem{lopezpaz2017revisiting}
+Lopez-Paz, D., Oquab, M.: Revisiting classifier two-sample tests. In: Proc.
+  International Conference on Learning Representations (ICLR) (2017)
+
+\bibitem{gss2024}
+{NORC at the University of Chicago}: General social survey: 1972--2024
+  cumulative data file. General Social Survey (2024),
+  \url{https://gss.norc.org/}
+
+\bibitem{nowok2016synthpop}
+Nowok, B., Raab, G.M., Dibben, C.: synthpop: Bespoke creation of synthetic data
+  in {R}. Journal of Statistical Software  \textbf{74}(11) (2016)
+
+\bibitem{sizemore2024digital}
+Sizemore, N., Oliphant, K., Zheng, R., Martin, C.R., Claud, E.C.,
+  Chattopadhyay, I.: A digital twin of the infant microbiome to predict
+  neurodevelopmental deficits. Science Advances  \textbf{10}(15),  eadj0400
+  (2024). \doi{10.1126/sciadv.adj0400}
+
+\bibitem{snoke2018general}
+Snoke, J., Raab, G.M., Nowok, B., Dibben, C., Slavkovic, A.: General and
+  specific utility measures for synthetic data. Journal of Privacy and
+  Confidentiality  \textbf{8}(1) (2018)
+
+\bibitem{strobl2007}
+Strobl, C., Boulesteix, A., Hothorn, T., Zeileis, A.: Bias in random forest
+  variable importance measures: Illustrations, sources and a solution. BMC
+  Bioinformatics  \textbf{8}(25),  1--21 (2007)
+
+\bibitem{woo2009global}
+Woo, M.J., Reiter, J.P., Oganian, A., Karr, A.F.: Global measures of data
+  utility for microdata masked for disclosure limitation. Journal of Privacy
+  and Confidentiality  \textbf{1}(1),  111--124 (2009)
+
+\bibitem{wu2026emergenet}
+Wu, K., Li, F., Chattopadhyay, I.: Emergenet: A digital twin of influenza a
+  evolution for vaccine strain forecasting and emergence risk assessment.
+  Military Medicine  (2026). \doi{10.1093/milmed/usag255}, in print
+
+\bibitem{xu2019ctgan}
+Xu, L., Skoularidou, M., Cuesta-Infante, A., Veeramachaneni, K.: Modeling
+  tabular data using conditional {GAN}. In: Advances in Neural Information
+  Processing Systems. vol.~32 (2019)
+
+\end{thebibliography}

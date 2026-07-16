@@ -1,0 +1,28 @@
+\documentclass[10pt,onecolumn]{IEEEtran}
+\input{preamble.tex}
+
+% Standalone build: do not require shell escape.
+\tikzexternaldisable
+\pgfplotsset{compat=1.18}
+\newif\iftikzX
+\tikzXtrue
+
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{figure}
+\tikzexternalenable 
+  \tikzsetnextfilename{figres}
+  \centering
+   \iftikzX   
+  \input{Figures/figres}
+  \else
+  \includegraphics[width=.35\textwidth]{Figures/External/figres}
+  \fi
+
+\caption{Four complementary views of the GSS benchmark. (a) Cross-wave MAP-alignment--novelty frontier with nonparametric 95\% wave-bootstrap intervals. (b) Wave-level signed MAP-alignment differences from the original-row control. (c) Wave-level row novelty, defined as one minus mean nearest-real similarity. (d) MAP-alignment retention by GSS wave. The label ``Chow--Liu'' denotes the restricted Chow--Liu hybrid.}
+\label{fig:gss_benchmark_four_panel}
+\end{figure}
+
+\end{document}

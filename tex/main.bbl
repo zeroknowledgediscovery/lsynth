@@ -21,6 +21,22 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{argyle2023out}
+L.~P. Argyle, E.~C. Busby, N.~Fulda, J.~R. Gubler, C.~Rytting, and D.~Wingate,
+  ``Out of one, many: Using language models to simulate human samples,''
+  \emph{Political Analysis}, vol.~31, no.~3, pp. 337--351, 2023.
+
+\bibitem{bisbee2024synthetic}
+J.~Bisbee, J.~D. Clinton, C.~Dorff, B.~Kenkel, and J.~M. Larson, ``Synthetic
+  replacements for human survey data? the perils of large language models,''
+  \emph{Political Analysis}, vol.~32, no.~4, pp. 432--448, 2024.
+
+\bibitem{kozlowski2025simulating}
+A.~C. Kozlowski and J.~A. Evans, ``Simulating subjects: The promise and peril
+  of artificial intelligence stand-ins for social agents and interactions,''
+  \emph{Sociological Methods \& Research}, vol.~54, no.~3, pp. 1017--1073,
+  2025.
+
 \bibitem{kingma2014autoencoding}
 D.~P. Kingma and M.~Welling, ``Auto-encoding variational bayes,'' in
   \emph{Proc. International Conference on Learning Representations (ICLR)},
@@ -56,6 +72,17 @@ J.~Snoke, G.~M. Raab, B.~Nowok, C.~Dibben, and A.~Slavkovic, ``General and
 \bibitem{nowok2016synthpop}
 B.~Nowok, G.~M. Raab, and C.~Dibben, ``synthpop: Bespoke creation of synthetic
   data in {R},'' \emph{Journal of Statistical Software}, vol.~74, no.~11, 2016.
+
+\bibitem{sizemore2024digital}
+N.~Sizemore, K.~Oliphant, R.~Zheng, C.~R. Martin, E.~C. Claud, and
+  I.~Chattopadhyay, ``A digital twin of the infant microbiome to predict
+  neurodevelopmental deficits,'' \emph{Science Advances}, vol.~10, no.~15, p.
+  eadj0400, 2024.
+
+\bibitem{wu2026emergenet}
+K.~Wu, F.~Li, and I.~Chattopadhyay, ``Emergenet: A digital twin of influenza a
+  evolution for vaccine strain forecasting and emergence risk assessment,''
+  \emph{Military Medicine}, 2026, in print.
 
 \bibitem{bishop2006pattern}
 C.~M. Bishop, \emph{Pattern Recognition and Machine Learning}.\hskip 1em plus
@@ -112,7 +139,7 @@ T.~Hothorn, K.~Hornik, and A.~Zeileis, ``Unbiased recursive partitioning: A
   Graphical Statistics}, vol.~15, no.~3, pp. 651--674, 2006.
 
 \bibitem{hothorn2006party}
-------, ``{party}: A laboratory for recursive partytioning,'' \emph{R News},
+------, ``{party}: A laboratory for recursive partitioning,'' \emph{R News},
   vol.~6, no.~2, pp. 17--23, 2006.
 
 \bibitem{strobl2007}
@@ -124,5 +151,12 @@ C.~Strobl, A.~Boulesteix, T.~Hothorn, and A.~Zeileis, ``Bias in random forest
 W.~Hoeffding, ``Probability inequalities for sums of bounded random
   variables,'' \emph{Journal of the American Statistical Association}, vol.~58,
   no. 301, pp. 13--30, 1963.
+
+\bibitem{gss2024}
+\BIBentryALTinterwordspacing
+{NORC at the University of Chicago}, ``General social survey: 1972--2024
+  cumulative data file,'' General Social Survey, 2024. [Online]. Available:
+  \url{https://gss.norc.org/}
+\BIBentrySTDinterwordspacing
 
 \end{thebibliography}

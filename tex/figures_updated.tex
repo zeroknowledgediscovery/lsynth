@@ -1,0 +1,37 @@
+\documentclass[10pt,onecolumn]{IEEEtran}
+\input{preamble.tex}
+
+% Standalone build: do not require shell escape.
+\tikzexternaldisable
+\pgfplotsset{compat=1.18}
+
+% Data files.
+\newcommand{\WaveLSM}{data/wave_lsm.csv}
+\newcommand{\WaveChow}{data/wave_chow_liu.csv}
+\newcommand{\WaveCTGAN}{data/wave_ctgan.csv}
+\newcommand{\WaveBase}{data/wave_baseline.csv}
+\newcommand{\WaveCtrl}{data/wave_original_sample_control.csv}
+\newcommand{\SumLSM}{data/summary_lsm.csv}
+\newcommand{\SumChow}{data/summary_chow_liu.csv}
+\newcommand{\SumCTGAN}{data/summary_ctgan.csv}
+\newcommand{\SumBase}{data/summary_baseline.csv}
+\newcommand{\SumCtrl}{data/summary_original_sample_control.csv}
+
+% Consistent generator colors.
+\definecolor{lsmcol}{RGB}{31,119,180}
+\definecolor{chowcol}{RGB}{230,126,34}
+\definecolor{ctgancol}{RGB}{46,139,87}
+\definecolor{basecol}{RGB}{192,57,43}
+\definecolor{ctrlcol}{RGB}{117,107,177}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{figure}
+\centering
+\input{figres.tex}
+\caption{Four complementary views of the GSS benchmark. (a) Cross-wave MAP-alignment--novelty frontier with nonparametric 95\% wave-bootstrap intervals. (b) Wave-level signed MAP-alignment differences from the original-row control. (c) Wave-level row novelty, defined as one minus mean nearest-real similarity. (d) MAP-alignment retention by GSS wave. The label ``Chow--Liu'' denotes the restricted Chow--Liu hybrid.}
+\label{fig:gss_benchmark_four_panel}
+\end{figure}
+
+\end{document}

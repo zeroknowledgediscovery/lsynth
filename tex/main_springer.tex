@@ -1,25 +1,48 @@
-% IEEE-format working draft for scientific review.
-\documentclass[10pt,technote,twocolumn]{IEEEtran}
+% Springer proceedings working source for CSS 2026.
+% Uses Springer's LLNCS proceedings class, available in standard TeX Live.
+% If the conference supplies a different Springer Proceedings in Complexity
+% class file, the body can be reused with the official class.
+\documentclass[runningheads]{llncs}
 
-% Shared project style supplied with this iteration.
-\input{preamble_original}
-
-% Paper-specific additions not currently enabled in preamble.tex.
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{graphicx}
 \usepackage{booktabs}
-\newtheorem{theorem}{Theorem}
-\newtheorem{lemma}{Lemma}
-\newtheorem{corollary}{Corollary}
-\usepackage{flushend}
+\usepackage{float}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage[linesnumbered,ruled,vlined,noend]{algorithm2e}
+\usepackage[hidelinks]{hyperref}
+\usetikzlibrary{shapes,calc,positioning,patterns,decorations.markings}
+\usepgfplotslibrary{groupplots,statistics,colorbrewer}
+\pgfplotsset{compat=1.18}
 
-\renewcommand{\baselinestretch}{.92}
-\title{How Good Is Your Synthetic Social Data?\\Conditional Alignment and Novelty Across 34 GSS Waves}
-
-% TODO(next draft): replace the provisional author line with the complete
-% author list, affiliations, correspondence address, and contribution notes.
-\author{Ishanu Chattopadhyay, \emph{et al.}}
+% Compact equation helpers inherited from the working draft.
+\def\EQSP{3pt}
+\newcommand{\cgather}[2][\EQSP]{\begingroup\setlength\abovedisplayskip{#1}\setlength\belowdisplayskip{#1}\begin{gather} #2 \end{gather}\endgroup\noindent}
+\newcommand{\cgathers}[2][\EQSP]{\begingroup\setlength\abovedisplayskip{#1}\setlength\belowdisplayskip{#1}\begin{gather*} #2 \end{gather*}\endgroup\noindent}
+\newcommand{\calign}[2][\EQSP]{\begingroup\setlength\abovedisplayskip{#1}\setlength\belowdisplayskip{#1}\begin{align} #2 \end{align}\endgroup\noindent}
+\newcommand{\caligns}[2][\EQSP]{\begingroup\setlength\abovedisplayskip{#1}\setlength\belowdisplayskip{#1}\begin{align*} #2 \end{align*}\endgroup\noindent}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{arg\,min}
 
 \begin{document}
- \raggedbottom
+\raggedbottom
+\setlength{\textfloatsep}{12pt plus 2pt minus 2pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+\mainmatter
+
+\title{How Good Is Your Synthetic Social Data? Conditional Alignment and Novelty Across 34 GSS Waves}
+\titlerunning{Conditional Alignment and Novelty in Synthetic Social Data}
+
+\author{Hari Dahal\inst{1} \and Ishanu Chattopadhyay\inst{1}\thanks{Corresponding author.}}
+\authorrunning{H. Dahal and I. Chattopadhyay}
+\institute{University of Kentucky, Lexington, KY, USA\\
+\email{ishanu\_ch@uky.edu}}
 
 \maketitle
 
@@ -42,12 +65,13 @@ MAP-alignment fraction was $1.062$ ($[0.992,1.154]$). Mean nearest-real
 similarity was $0.3800$, corresponding to row novelty $0.6200$, whereas the
 original (control) had essentially zero novelty. The framework separates conditional alignment from respondent-level
 reuse and provides a validation tool for synthetic social data.
+\keywords{synthetic populations \and
+computational social science \and
+survey simulation \and
+General Social Survey \and
+conditional inference \and
+model validation}
 \end{abstract}
-
-\begin{IEEEkeywords}
-synthetic populations, computational social science, survey simulation,
-General Social Survey, conditional inference, model validation
-\end{IEEEkeywords}
 
 \section{Introduction and Motivation}
 Synthetic social data support data sharing, replication, and population
@@ -80,8 +104,11 @@ second-order moments but different conditional structure.
 
 The recursive conditional architecture used by the LSM comparator has supported
 digital twins of the infant microbiome~\cite{sizemore2024digital} and influenza
-evolution~\cite{wu2026emergenet}. Here we study evaluation rather than
-substantive opinion dynamics, using repeated social surveys as the test bed.
+evolution~\cite{wu2026emergenet}. In this benchmark, each wave-specific LSM
+models survey variables through coordinate-wise conditional models and generates
+complete records by recursive conditional sampling, following the same general
+architecture. Here we study evaluation rather than substantive opinion dynamics,
+using repeated social surveys as the test bed.
 
 We evaluate conditional structure inferred directly from data. Given real or
 synthetic samples, we estimate each coordinate's conditional distribution
@@ -396,7 +423,7 @@ Then $d_{\mu}$ is a metric on the set of strictly positive probability
 distributions on $\mathcal{X}$.
 \end{theorem}
 
-\begin{IEEEproof}
+\begin{proof}
 Nonnegativity and symmetry are immediate. The triangle inequality follows from the scalar inequality
 $\lvert a-c\rvert \le \lvert a-b\rvert + \lvert b-c\rvert$ applied pointwise and averaged over coordinates and integrated with respect to $\mu$.
 For identity of indiscernibles, if $d_{\mu}(P_1,P_2)=0$, then
@@ -406,7 +433,7 @@ $(x^{-i},i)$, the conditional distribution is recovered from its normalized
 profile by
 $P_i(x^i\mid x^{-i})=u_P(x,i)/\sum_{z\in\mathcal{X}^i}u_P((z,x^{-i}),i)$.
 Thus all full conditionals agree. Theorem~\ref{thm:brook} then implies $P_1=P_2$.
-\end{IEEEproof}
+\end{proof}
 
 Given empirical datasets $D_1,D_2$, train conditional generator families
 $G_1,G_2$ yielding conditional families $\Phi^{(1)}$ and $\Phi^{(2)}$.
@@ -446,7 +473,7 @@ M^{-1/2}
 }
 \end{theorem}
 
-\begin{IEEEproof}
+\begin{proof}
 By the triangle inequality,
 \calign{
 \left\lvert \widehat d_{\mu}-d_{\mu}(P_1,P_2)\right\rvert
@@ -465,7 +492,7 @@ training datasets. Hoeffding's inequality therefore gives the
 $O_p(M^{-1/2})$ term. The second term is controlled by the Lipschitz
 continuity of $u(\varphi)=\varphi/\max_y\varphi(y)$ on finite
 probability simplices, together with \eqref{eq:conditional_error}.
-\end{IEEEproof}
+\end{proof}
 \subsection{One-Sided MAP-Alignment Comparison Against Held-Out Real Data}
 
 Let $D_{\mathrm{fit}}$ be an evaluator-training dataset independent of both
@@ -519,7 +546,7 @@ d_{\mu}(P_1,P_2).
 }
 \end{theorem}
 
-\begin{IEEEproof}
+\begin{proof}
 From the previous theorem we have
 \cgather{
 \big|
@@ -535,16 +562,19 @@ M^{-1/2}
 \right).
 }
 As $M\to\infty$ and $|D_k|\to\infty$, both $M^{-1/2}$ and $\epsilon_k$ converge to zero in probability, which implies \eqref{eq:limit_metric}.
-\end{IEEEproof}
+\end{proof}
 
 \begin{corollary}
 If $P_1=P_2$, then
-$\widehat d_{\mu}(D_1,D_2;E_{\mu})\xrightarrow{p}0$.
+\cgather{
+\widehat d_{\mu}(D_1,D_2;E_{\mu})\xrightarrow{p}0.
+}
 If $P_1\neq P_2$, then
-$\widehat d_{\mu}(D_1,D_2;E_{\mu})\xrightarrow{p}d_{\mu}(P_1,P_2)>0$.
+\cgather{
+\widehat d_{\mu}(D_1,D_2;E_{\mu})
+\xrightarrow{p}d_{\mu}(P_1,P_2)>0.
+}
 \end{corollary}
-
-
 
 \subsection{Cross-Fitted Evaluation When Independent Training Data Are Unavailable}
 
@@ -589,23 +619,17 @@ row-level Hoeffding radius at confidence $1-\delta$ is
 \begin{equation}
 r_M(\delta)=\sqrt{\frac{1}{2M}\log\frac{2}{\delta}}.
 \end{equation}
-For example, $r_M(0.05)=0.1358$ when $M=100$ and $0.0429$ when
-$M=1000$. Conditional-estimation uncertainty must be added separately or
-handled through data splitting, repeated fitting, or a higher-level bootstrap.
-
-
-
-
-
-
+At $\delta=0.05$, the radii are $0.1358$ for $M=100$ and $0.0429$ for
+$M=1000$. Conditional-estimation uncertainty must be handled separately through
+data splitting, repeated fitting, or a higher-level bootstrap.
 
 \section{Low-Order Moment Matching is Insufficient: Two Illustrative Examples}\label{sec:examples}
 
 Two examples in $\mathbb{R}^3$ show that identical first- and second-order
 moments do not imply similar conditional structure. We use the
 continuous-density analogue of the finite-state score, replacing the maximum by
-an essential supremum; a formal continuous extension is deferred to the theory
-appendix.
+an essential supremum. A formal extension to continuous and mixed-type data is
+left for future work.
 
 \subsection{Example 1: Uniform vs.\ Gaussian with Identical Moments}
 
@@ -690,8 +714,8 @@ L L^{\!\top},
 }
 and share identical columnwise means and variances.
 
-However, their conditional distributions remain fundamentally different.
-Since $Y^{(U)}$ is the image of a uniform cube under a linear shear, each
+Their conditional distributions nevertheless differ. Since $Y^{(U)}$ is the
+image of a uniform cube under a linear shear, each
 conditional $Y^{i,(U)} \mid Y^{-i,(U)}$ is uniform on a finite
 interval (given by the intersection of a line with a parallelepiped),
 implying
@@ -768,12 +792,30 @@ capture worst-case near-copying behavior.
 
 The diagnostics are complementary: $\Upsilon(D)$ measures conditional
 alignment, whereas $\mathcal{N}(D_{\mathrm{syn}})$ measures proximity to
-specific real records. The target is $\Delta\Upsilon\to0$ (equivalently
-$R_{\Upsilon}\to1$) with $\mathcal{N}$ well below one.
+specific real records. Nearest-row novelty is a memorization diagnostic, not a
+formal privacy guarantee; disclosure risk requires separate membership, linkage,
+or attribute-inference analysis. The target is $\Delta\Upsilon\to0$
+(equivalently $R_{\Upsilon}\to1$) with $\mathcal{N}$ well below one.
 
+\subsection{Practical Use of the Diagnostics}
 
+The diagnostics answer different questions and should be selected accordingly.
+MAP alignment is appropriate when the primary concern is whether synthetic
+records preserve the conditional response structure represented by a held-out
+real-data evaluator. In that setting, practitioners should report the signed
+MAP-alignment gap, the raw reference score, and, when an independent-marginal
+null is available, the zero-anchored excess-alignment fraction $\Lambda$.
 
+Nearest-real similarity is appropriate when the concern is copying or near reuse
+of individual records. It should be reported together with exact duplicate rates
+and upper-tail summaries, such as the 95th or 99th percentile, rather than only
+a mean. It is not a substitute for formal disclosure-risk analysis.
 
+Neither diagnostic replaces marginal checks or application-specific validation.
+When the synthetic data will support a particular estimand, classifier, or policy
+simulation, MAP alignment and novelty should be combined with relevant marginal,
+task-based, and, where necessary, privacy metrics. A single scalar score is not
+sufficient for all uses of synthetic social data.
 
 
 \section{Empirical Evaluation on Repeated GSS Cross-Sections}
@@ -785,9 +827,13 @@ We analyzed 34 General Social Survey (GSS) waves spanning
 1972--2024~\cite{gss2024}. Each wave was split before model fitting: 50\% of
 respondents were used to train the wave-specific LSM and conditional evaluator,
 and the remaining 50\% were held out from LSM fitting for comparator
-construction, the real-data control, and all reported evaluation. Across waves,
-the data contained 71,667 respondent records and 197--1,273 modeled variables
-per wave (Table~\ref{tab:gss_data}).
+construction, the real-data control, and all reported evaluation. Missing and
+nonresponse entries were preserved as missing throughout LSM fitting and
+evaluation rather than recoded as substantive response levels or statistically
+imputed. For nearest-row similarity, missing entries were represented by a
+common missing marker solely for one-hot computation. Across waves, the data
+contained 71,667 respondent records and 197--1,273 modeled variables per wave
+(Table~\ref{tab:gss_data}).
 
 \begin{table}[t]
 \centering
@@ -811,14 +857,18 @@ Evaluated records per condition & 1,000 \\
 \end{tabular}
 \end{table}
 
-We compared LSM, a restricted Chow--Liu hybrid, CTGAN, an independent marginal
-baseline, and the original (control). Each condition produced 1,000 records and
+We compared LSM, a restricted Chow--Liu hybrid~\cite{chow1968},
+CTGAN~\cite{xu2019ctgan}, an independent marginal baseline, and the original
+(control). Each condition produced 1,000 records and
 was scored by the same fixed, wave-specific evaluator. Waves were the paired
 comparison units. We report the signed gap
 $\Upsilon_{g,w}-\Upsilon_{\mathrm{control},w}$, the retention ratio
 $\Upsilon_{g,w}/\Upsilon_{\mathrm{control},w}$, and row novelty. Confidence
-intervals are nonparametric bootstraps over the 34 waves. Numerical similarity
-values were clipped to $[0,1]$.
+intervals are nonparametric bootstraps over the 34 waves. Because GSS waves are
+temporally ordered repeated cross-sections rather than exchangeable draws from a
+population of survey years, these intervals summarize stability across the
+observed waves and are not population-level temporal confidence intervals.
+Numerical similarity values were clipped to $[0,1]$.
 
 Because $\Upsilon$ is bounded but not zero-anchored, we additionally report the
 fraction of alignment recovered above the independent-marginal null. Let
@@ -836,7 +886,7 @@ original (control) at $\Lambda=1$. Bootstrap intervals resample waves jointly
 and recompute the complete ratio within each replicate. Table~\ref{tab:gss_benchmark}
 summarizes the cross-wave results.
 
-\begin{table*}[t]
+\begin{table}[t]
 \centering
 \caption{Cross-wave benchmark summary over 34 GSS waves. The signed gap is
 $\Upsilon_{\mathrm{generator}}-\Upsilon_{\mathrm{control}}$.
@@ -848,6 +898,7 @@ similarity.}
 \label{tab:gss_benchmark}
 \small
 \setlength{\tabcolsep}{3.5pt}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccc}
 \toprule
 Generator & Mean $\Upsilon$ & Signed gap (95\% CI) &
@@ -863,8 +914,9 @@ Independent baseline & 0.7567 & $-0.0437$ $[-0.0483,-0.0390]$ &
 0.000 (anchor) & 0.5619 & 0.4381 \\
 Original (control) & 0.8004 & 0.0000 & 1.000 (anchor) & 1.0000 & 0.0000 \\
 \bottomrule
-\end{tabular}
-\end{table*}
+\end{tabular}%
+}
+\end{table}
 
 \subsection{MAP Alignment}
 
@@ -900,17 +952,9 @@ with excess MAP alignment above the independent-marginal null. LSM therefore
 occupies the favorable region of the archived alignment--novelty plane.
 
 
-\begin{figure*}[t]
-\tikzexternalenable 
-  \tikzsetnextfilename{figres}
+\begin{figure}[tbp]
   \centering
-  \tikzXfalse
-   \iftikzX   
   \input{Figures/figres}
-  \else
-  \includegraphics[width=.84\textwidth]{Figures/External/figres}
-  \fi
-
 \caption{Four complementary views of the GSS benchmark: (a) the excess
 MAP-alignment fraction
 $\Lambda_g=(\bar{\Upsilon}_g-\bar{\Upsilon}_{\mathrm{ind}})/
@@ -922,27 +966,8 @@ at one; (b) wave-level signed MAP-alignment differences from the original (contr
 similarity; and (d) MAP-alignment retention by GSS wave. The label
 ``Chow--Liu'' denotes the restricted Chow--Liu hybrid.}
 \label{fig:gss_benchmark_four_panel}
-\end{figure*}
+\end{figure}
 
-
-
-
-
-
-
-
-
-
-
-
-\subsection{Scope of the Current Benchmark}
-
-The archived configurations do not constitute a definitive ranking of generator
-classes. CTGAN used 50 training rows per wave, the restricted Chow--Liu hybrid
-used up to 5,000, and LSM used the 50\% training split described above. A final
-algorithmic comparison should equalize training information and tuning budgets
-and include multiple seeds. Algorithm~\ref{alg:crossfit} remains an alternative
-for applications without an independent evaluator-training set.
 
 \section{Discussion}
 
@@ -962,10 +987,46 @@ computational social science, the framework provides a model-agnostic validation
 layer for synthetic survey populations used in sharing, replication, and
 simulation.
 
-Remaining work is methodological rather than interpretive: formalize the
-continuous extension, assess evaluator sensitivity through repeated fitting,
-and report duplicate rates, upper-tail nearest-row similarities, generator
-hyperparameters, missing-data handling, and discretization sensitivity.
+\section{Limitations}
+
+The identification results require strict positivity and compatibility of the
+full conditional system. Separately fitted conditional learners need not be
+exactly compatible with a single joint distribution. MAP alignment remains a
+well-defined evaluator statistic in that setting, but interpreting $d_\mu$ as a
+metric between underlying generative processes requires the stated compatibility
+assumption.
+
+The formal development is for finite product spaces. The GSS benchmark uses
+categorical or discretely encoded variables, while the Gaussian examples use a
+continuous-density analogue based on an essential supremum. A general treatment
+of continuous and mixed-type variables, including the effects of discretization,
+is not established here and is forthcoming.
+
+The benchmark treats GSS records as unweighted observations and does not model
+survey weights, strata, or primary sampling units. The reported quantities
+therefore describe conditional structure in the analyzed records rather than
+population-representative social-science estimands. Missing and nonresponse
+entries were treated as missing rather than as substantive response categories;
+the analysis did not statistically impute them. Results may nevertheless depend
+on the prevalence and pattern of missingness across waves.
+
+Computational cost grows with both the number of coordinates and the number of
+evaluated records: the evaluator fits one conditional model per variable and
+scores each record-coordinate pair. Parallelization made the 197--1,273-variable
+GSS waves tractable, but repeated fitting, extensive tuning, and substantially
+larger schemas may be costly.
+
+\section{Future Work}
+
+Immediate extensions are to formalize the continuous and mixed-type theory and
+to incorporate survey weights and complex-design information into the reference
+measure and aggregation scheme. Evaluator sensitivity should be assessed through
+repeated train--test splits, repeated conditional-model fitting, and cross-fitted
+variants when a separate evaluator-training set is unavailable. Empirical reports
+should add exact duplicate rates and upper-tail nearest-row similarities, rather
+than relying only on the mean novelty statistic. Future analyses should also test
+sensitivity to missingness patterns and variable discretization, together with
+computational approximations for very high-dimensional data.
 
 \section{Data and Code Availability}
 
@@ -974,9 +1035,7 @@ implementation and reproducible examples are available in the public repository
 at \url{https://github.com/zeroknowledgediscovery/lsynth}. The Python package is
 distributed through PyPI and can be installed with \texttt{pip install lsynth}.
 
-\bibliographystyle{IEEEtran}
+\bibliographystyle{splncs04}
 \bibliography{lsyn}
 
-
 \end{document}
-

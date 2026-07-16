@@ -32,6 +32,7 @@
 \usetikzlibrary{decorations.text}
 \usepgfplotslibrary{colorbrewer} 
 \usepgfplotslibrary{statistics}
+\usepackage{flushend}
 
 \tikzexternalize[prefix=./Figures/External/]% activate externalization!
 \tikzexternaldisable
@@ -131,11 +132,10 @@
 \usepackage[linesnumbered,ruled,vlined,noend]{algorithm2e}
 \newcommand{\captionN}[1]{\caption{\color{gray} \sffamily \fontsize{9}{10}\selectfont #1  }}
 \newcommand{\btl}{\ \textbf{\small\sffamily bits/letter}}
-% LuaLaTeX-compatible OpenType implementation of the supplied Concrete style.
-%\usepackage{concmath-otf}
+%\usepackage{concmath}
 %\usepackage{kerkis}
-%\usepackage{tgheros}
-\usepackage{newtxtext}
+\usepackage{tgheros}
+%\usepackage{newtxtext}
 %\usepackage{pxfonts}
 \usepackage{newtxmath}
 \usepackage{times}
@@ -147,13 +147,11 @@
 \edef\keptsfdefault{\sfdefault}
 \edef\keptttdefault{\ttdefault}
 %
-% fontenc is not used with LuaLaTeX/unicode-math.
-% \usepackage[OT1]{fontenc}
+\usepackage[OT1]{fontenc}
 %\usepackage{eulervm} 
 %\usepackage{ccfonts}
 %\usepackage{eulervm} 
-%% fontenc is not used with LuaLaTeX/unicode-math.
-% \usepackage[OT1]{fontenc}
+%\usepackage[OT1]{fontenc}
 %restore defaults
 \edef\rmdefault{\keptrmdefault}
 \edef\sfdefault{\keptsfdefault}
@@ -259,7 +257,7 @@
 \newcommand{\cp}[1][P]{\langle #1 \rangle}
 \newcommand{\mem}[1]{\M_{#1}}
 
-\parskip=6pt
+\parskip=4pt
 \parindent=0pt
 
 
