@@ -1,0 +1,15 @@
+{
+  "year": 1972,
+  "data_path": "datasets/gss_1972.csv",
+  "model_path": "datasets/gss_1972.pkl.gz",
+  "output_dir": "synthetic_eval_outputs",
+  "num_rows": 1000,
+  "n_workers": 120,
+  "ctgan_workers": 10,
+  "ctgan_train_rows": 50,
+  "similarity_max_rows": 2000,
+  "random_state": 123,
+  "run_ctgan": true,
+  "start_time": "2026-07-08 23:08:24",
+  "end_time": "2026-07-08 23:25:27"
+}

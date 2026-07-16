@@ -1,0 +1,12 @@
+year,plot_path,filename,description,exists,size_bytes
+1972,synthetic_eval_outputs/plots/upsilon_lsm_1972.png,upsilon_lsm_1972.png,Upsilon distribution for lsm,True,37951
+1972,synthetic_eval_outputs/plots/upsilon_baseline_1972.png,upsilon_baseline_1972.png,Upsilon distribution for baseline,True,38221
+1972,synthetic_eval_outputs/plots/upsilon_ctgan_1972.png,upsilon_ctgan_1972.png,Upsilon distribution for ctgan,True,40658
+1972,synthetic_eval_outputs/plots/upsilon_original_sample_control_1972.png,upsilon_original_sample_control_1972.png,Upsilon distribution for original_sample_control,True,41299
+1972,synthetic_eval_outputs/plots/upsilon_all_generators_1972.png,upsilon_all_generators_1972.png,Overlay of Upsilon distributions across generators,True,60460
+1972,synthetic_eval_outputs/plots/novelty_row_similarity_lsm_1972.png,novelty_row_similarity_lsm_1972.png,Novelty row-similarity block plot for lsm,True,1201946
+1972,synthetic_eval_outputs/plots/novelty_row_similarity_baseline_1972.png,novelty_row_similarity_baseline_1972.png,Novelty row-similarity block plot for baseline,True,1117539
+1972,synthetic_eval_outputs/plots/novelty_row_similarity_ctgan_1972.png,novelty_row_similarity_ctgan_1972.png,Novelty row-similarity block plot for ctgan,True,1090898
+1972,synthetic_eval_outputs/plots/novelty_row_similarity_original_sample_control_1972.png,novelty_row_similarity_original_sample_control_1972.png,Novelty row-similarity block plot for original_sample_control,True,1337540
+1972,synthetic_eval_outputs/plots/column_30_sppres105plus_1972.png,column_30_sppres105plus_1972.png,Marginal distribution comparison for column 30: SPPRES105PLUS,True,41608
+1972,synthetic_eval_outputs/plots/generator_map_upsilon_vs_inverse_nearest_real_similarity_1972.png,generator_map_upsilon_vs_inverse_nearest_real_similarity_1972.png,Generator map using Upsilon median and inverse nearest-real similarity median,True,65943

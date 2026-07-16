@@ -1,0 +1,96 @@
+year,generator,category,metric,value
+2022,lsm,upsilon,printed_nanmean_upsilon,0.9724040053106535
+2022,lsm,upsilon,upsilon_n,1000
+2022,lsm,upsilon,upsilon_mean,0.9724040053106535
+2022,lsm,upsilon,upsilon_median,0.9729007488146248
+2022,lsm,upsilon,upsilon_std,0.0055920084150992986
+2022,lsm,upsilon,upsilon_p05,0.9629445454177257
+2022,lsm,upsilon,upsilon_p95,0.9812200082853406
+2022,baseline,upsilon,printed_nanmean_upsilon,0.958754285055445
+2022,baseline,upsilon,upsilon_n,1000
+2022,baseline,upsilon,upsilon_mean,0.958754285055445
+2022,baseline,upsilon,upsilon_median,0.9587848869786388
+2022,baseline,upsilon,upsilon_std,0.007820144663332487
+2022,baseline,upsilon,upsilon_p05,0.9459122291272316
+2022,baseline,upsilon,upsilon_p95,0.9715417217138453
+2022,chow_liu,upsilon,printed_nanmean_upsilon,0.9614881373399687
+2022,chow_liu,upsilon,upsilon_n,1000
+2022,chow_liu,upsilon,upsilon_mean,0.9614881373399687
+2022,chow_liu,upsilon,upsilon_median,0.9623845555652308
+2022,chow_liu,upsilon,upsilon_std,0.010097265792656657
+2022,chow_liu,upsilon,upsilon_p05,0.943785204015026
+2022,chow_liu,upsilon,upsilon_p95,0.9764592900639412
+2022,sdv_gaussian_copula,upsilon,printed_nanmean_upsilon,0.9592086152276228
+2022,sdv_gaussian_copula,upsilon,upsilon_n,1000
+2022,sdv_gaussian_copula,upsilon,upsilon_mean,0.9592086152276228
+2022,sdv_gaussian_copula,upsilon,upsilon_median,0.959605672105672
+2022,sdv_gaussian_copula,upsilon,upsilon_std,0.009774902460061768
+2022,sdv_gaussian_copula,upsilon,upsilon_p05,0.9420222749609606
+2022,sdv_gaussian_copula,upsilon,upsilon_p95,0.9742843502234503
+2022,original_sample_control,upsilon,printed_nanmean_upsilon,0.9590196739665736
+2022,original_sample_control,upsilon,upsilon_n,1000
+2022,original_sample_control,upsilon,upsilon_mean,0.9590196739665736
+2022,original_sample_control,upsilon,upsilon_median,0.9616544675938756
+2022,original_sample_control,upsilon,upsilon_std,0.014349875501103782
+2022,original_sample_control,upsilon,upsilon_p05,0.9327332134426084
+2022,original_sample_control,upsilon,upsilon_p95,0.9779029942575882
+2022,lsm,similarity,printed_block_mean_matrix_json,"[[0.48980948328971863, 0.3561275899410248], [0.35612761974334717, 0.45420369505882263]]"
+2022,lsm,similarity,printed_stats_dictionary_json,"{""n_rows_each"": 1000, ""nearest_real_similarity_mean"": 0.41141441464424133, ""nearest_real_similarity_median"": 0.41133737564086914, ""nearest_real_similarity_p95"": 0.43459320068359375, ""inverse_nearest_real_similarity_median"": 2.431094423262624, ""missing_token_used"": ""__MISSING__"", ""block_means"": {""real_real"": 0.48980948328971863, ""real_synth"": 0.3561275899410248, ""synth_real"": 0.35612761974334717, ""synth_synth"": 0.45420369505882263}}"
+2022,lsm,similarity,n_rows_each,1000
+2022,lsm,similarity,nearest_real_similarity_mean,0.41141441464424133
+2022,lsm,similarity,nearest_real_similarity_median,0.41133737564086914
+2022,lsm,similarity,nearest_real_similarity_p95,0.43459320068359375
+2022,lsm,similarity,inverse_nearest_real_similarity_median,2.431094423262624
+2022,lsm,similarity,missing_token_used,__MISSING__
+2022,lsm,similarity,block_mean_real_real,0.48980948328971863
+2022,lsm,similarity,block_mean_real_synth,0.3561275899410248
+2022,lsm,similarity,block_mean_synth_real,0.35612761974334717
+2022,lsm,similarity,block_mean_synth_synth,0.45420369505882263
+2022,baseline,similarity,printed_block_mean_matrix_json,"[[0.48980948328971863, 0.4869031608104706], [0.48690304160118103, 0.4870685636997223]]"
+2022,baseline,similarity,printed_stats_dictionary_json,"{""n_rows_each"": 1000, ""nearest_real_similarity_mean"": 0.5799723863601685, ""nearest_real_similarity_median"": 0.5799404382705688, ""nearest_real_similarity_p95"": 0.6031957864761353, ""inverse_nearest_real_similarity_median"": 1.7243150054893293, ""missing_token_used"": ""__MISSING__"", ""block_means"": {""real_real"": 0.48980948328971863, ""real_synth"": 0.4869031608104706, ""synth_real"": 0.48690304160118103, ""synth_synth"": 0.4870685636997223}}"
+2022,baseline,similarity,n_rows_each,1000
+2022,baseline,similarity,nearest_real_similarity_mean,0.5799723863601685
+2022,baseline,similarity,nearest_real_similarity_median,0.5799404382705688
+2022,baseline,similarity,nearest_real_similarity_p95,0.6031957864761353
+2022,baseline,similarity,inverse_nearest_real_similarity_median,1.7243150054893293
+2022,baseline,similarity,missing_token_used,__MISSING__
+2022,baseline,similarity,block_mean_real_real,0.48980948328971863
+2022,baseline,similarity,block_mean_real_synth,0.4869031608104706
+2022,baseline,similarity,block_mean_synth_real,0.48690304160118103
+2022,baseline,similarity,block_mean_synth_synth,0.4870685636997223
+2022,chow_liu,similarity,printed_block_mean_matrix_json,"[[0.48980948328971863, 0.48878994584083557], [0.48878994584083557, 0.4887270927429199]]"
+2022,chow_liu,similarity,printed_stats_dictionary_json,"{""n_rows_each"": 1000, ""nearest_real_similarity_mean"": 0.6928320527076721, ""nearest_real_similarity_median"": 0.6860429644584656, ""nearest_real_similarity_p95"": 0.767436683177948, ""inverse_nearest_real_similarity_median"": 1.4576346552717137, ""missing_token_used"": ""__MISSING__"", ""block_means"": {""real_real"": 0.48980948328971863, ""real_synth"": 0.48878994584083557, ""synth_real"": 0.48878994584083557, ""synth_synth"": 0.4887270927429199}}"
+2022,chow_liu,similarity,n_rows_each,1000
+2022,chow_liu,similarity,nearest_real_similarity_mean,0.6928320527076721
+2022,chow_liu,similarity,nearest_real_similarity_median,0.6860429644584656
+2022,chow_liu,similarity,nearest_real_similarity_p95,0.767436683177948
+2022,chow_liu,similarity,inverse_nearest_real_similarity_median,1.4576346552717137
+2022,chow_liu,similarity,missing_token_used,__MISSING__
+2022,chow_liu,similarity,block_mean_real_real,0.48980948328971863
+2022,chow_liu,similarity,block_mean_real_synth,0.48878994584083557
+2022,chow_liu,similarity,block_mean_synth_real,0.48878994584083557
+2022,chow_liu,similarity,block_mean_synth_synth,0.4887270927429199
+2022,sdv_gaussian_copula,similarity,printed_block_mean_matrix_json,"[[0.48980948328971863, 0.4887678921222687], [0.4887678325176239, 0.4887915849685669]]"
+2022,sdv_gaussian_copula,similarity,printed_stats_dictionary_json,"{""n_rows_each"": 1000, ""nearest_real_similarity_mean"": 0.6046550869941711, ""nearest_real_similarity_median"": 0.606102705001831, ""nearest_real_similarity_p95"": 0.6584272384643555, ""inverse_nearest_real_similarity_median"": 1.6498853935934488, ""missing_token_used"": ""__MISSING__"", ""block_means"": {""real_real"": 0.48980948328971863, ""real_synth"": 0.4887678921222687, ""synth_real"": 0.4887678325176239, ""synth_synth"": 0.4887915849685669}}"
+2022,sdv_gaussian_copula,similarity,n_rows_each,1000
+2022,sdv_gaussian_copula,similarity,nearest_real_similarity_mean,0.6046550869941711
+2022,sdv_gaussian_copula,similarity,nearest_real_similarity_median,0.606102705001831
+2022,sdv_gaussian_copula,similarity,nearest_real_similarity_p95,0.6584272384643555
+2022,sdv_gaussian_copula,similarity,inverse_nearest_real_similarity_median,1.6498853935934488
+2022,sdv_gaussian_copula,similarity,missing_token_used,__MISSING__
+2022,sdv_gaussian_copula,similarity,block_mean_real_real,0.48980948328971863
+2022,sdv_gaussian_copula,similarity,block_mean_real_synth,0.4887678921222687
+2022,sdv_gaussian_copula,similarity,block_mean_synth_real,0.4887678325176239
+2022,sdv_gaussian_copula,similarity,block_mean_synth_synth,0.4887915849685669
+2022,original_sample_control,similarity,printed_block_mean_matrix_json,"[[0.48980948328971863, 0.48980939388275146], [0.4898093640804291, 0.48980939388275146]]"
+2022,original_sample_control,similarity,printed_stats_dictionary_json,"{""n_rows_each"": 1000, ""nearest_real_similarity_mean"": 0.9999902844429016, ""nearest_real_similarity_median"": 0.9999901652336121, ""nearest_real_similarity_p95"": 0.9999901652336121, ""inverse_nearest_real_similarity_median"": 1.0000098348631115, ""missing_token_used"": ""__MISSING__"", ""block_means"": {""real_real"": 0.48980948328971863, ""real_synth"": 0.48980939388275146, ""synth_real"": 0.4898093640804291, ""synth_synth"": 0.48980939388275146}}"
+2022,original_sample_control,similarity,n_rows_each,1000
+2022,original_sample_control,similarity,nearest_real_similarity_mean,0.9999902844429016
+2022,original_sample_control,similarity,nearest_real_similarity_median,0.9999901652336121
+2022,original_sample_control,similarity,nearest_real_similarity_p95,0.9999901652336121
+2022,original_sample_control,similarity,inverse_nearest_real_similarity_median,1.0000098348631115
+2022,original_sample_control,similarity,missing_token_used,__MISSING__
+2022,original_sample_control,similarity,block_mean_real_real,0.48980948328971863
+2022,original_sample_control,similarity,block_mean_real_synth,0.48980939388275146
+2022,original_sample_control,similarity,block_mean_synth_real,0.4898093640804291
+2022,original_sample_control,similarity,block_mean_synth_synth,0.48980939388275146
